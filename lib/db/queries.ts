@@ -12,63 +12,28 @@ import {
   lt,
   type SQL,
 } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
 import type { ArtifactKind } from "@/components/chat/artifact";
 import type { VisibilityType } from "@/components/chat/visibility-selector";
 import { ChatbotError } from "../errors";
-import { generateUUID } from "../utils";
+import { db } from "./client";
 import {
+  type Benefit,
+  benefit,
   type Chat,
   chat,
   type DBMessage,
   document,
   message,
+  type Provider,
+  provider,
+  providerRelation,
   type Suggestion,
   stream,
   suggestion,
-  type User,
-  user,
+  type UserSubscription,
+  userSubscription,
   vote,
 } from "./schema";
-import { generateHashedPassword } from "./utils";
-
-const client = postgres(process.env.POSTGRES_URL ?? "");
-const db = drizzle(client);
-
-export async function getUser(email: string): Promise<User[]> {
-  try {
-    return await db.select().from(user).where(eq(user.email, email));
-  } catch (error) {
-    throw new ChatbotError("bad_request:database", { cause: error });
-  }
-}
-
-export async function createUser(email: string, password: string) {
-  const hashedPassword = generateHashedPassword(password);
-
-  try {
-    return await db.insert(user).values({ email, password: hashedPassword });
-  } catch (error) {
-    throw new ChatbotError("bad_request:database", {
-      cause: error,
-    });
-  }
-}
-
-export async function createGuestUser() {
-  const email = `guest-${Date.now()}`;
-  const password = generateHashedPassword(generateUUID());
-
-  try {
-    return await db.insert(user).values({ email, password }).returning({
-      email: user.email,
-      id: user.id,
-    });
-  } catch (error) {
-    throw new ChatbotError("bad_request:database", { cause: error });
-  }
-}
 
 export async function saveChat({
   id,
@@ -248,9 +213,7 @@ export async function updateMessage({
   try {
     return await db.update(message).set({ parts }).where(eq(message.id, id));
   } catch (error) {
-    throw new ChatbotError("bad_request:database", {
-      cause: error,
-    });
+    throw new ChatbotError("bad_request:database", { cause: error });
   }
 }
 
@@ -293,9 +256,7 @@ export async function voteMessage({
       messageId,
     });
   } catch (error) {
-    throw new ChatbotError("bad_request:database", {
-      cause: error,
-    });
+    throw new ChatbotError("bad_request:database", { cause: error });
   }
 }
 
@@ -376,13 +337,11 @@ export async function updateDocumentContent({
 
 export async function getDocumentsById({ id }: { id: string }) {
   try {
-    const documents = await db
+    return await db
       .select()
       .from(document)
       .where(eq(document.id, id))
       .orderBy(asc(document.createdAt));
-
-    return documents;
   } catch (error) {
     throw new ChatbotError("bad_request:database", { cause: error });
   }
@@ -550,8 +509,7 @@ export async function getMessageCountByUserId({
           gte(message.createdAt, cutoffTime),
           eq(message.role, "user")
         )
-      )
-      .execute();
+      );
 
     return stats?.count ?? 0;
   } catch (error) {
@@ -581,10 +539,295 @@ export async function getStreamIdsByChatId({ chatId }: { chatId: string }) {
       .select({ id: stream.id })
       .from(stream)
       .where(eq(stream.chatId, chatId))
-      .orderBy(asc(stream.createdAt))
-      .execute();
+      .orderBy(asc(stream.createdAt));
 
     return streamIds.map(({ id }) => id);
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+// --- Subscription / benefits queries -------------------------------------
+
+export async function getAllProviders(): Promise<Provider[]> {
+  try {
+    return await db.select().from(provider).orderBy(asc(provider.name));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export type ProviderSummary = Provider & { benefitCount: number };
+
+export async function getAllProvidersWithBenefitCounts(): Promise<
+  ProviderSummary[]
+> {
+  try {
+    return await db
+      .select({
+        annualFee: provider.annualFee,
+        benefitCount: count(benefit.id),
+        category: provider.category,
+        createdAt: provider.createdAt,
+        description: provider.description,
+        id: provider.id,
+        issuer: provider.issuer,
+        lastVerifiedAt: provider.lastVerifiedAt,
+        logo: provider.logo,
+        name: provider.name,
+        section: provider.section,
+        slug: provider.slug,
+        sourceType: provider.sourceType,
+        status: provider.status,
+        website: provider.website,
+      })
+      .from(provider)
+      .leftJoin(benefit, eq(benefit.providerId, provider.id))
+      .groupBy(provider.id)
+      .orderBy(asc(provider.name));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export type ProviderRelationSummary = {
+  childId: string;
+  childName: string;
+  childSlug: string;
+  note: string | null;
+  parentId: string;
+};
+
+export async function getProviderRelations(): Promise<
+  ProviderRelationSummary[]
+> {
+  try {
+    return await db
+      .select({
+        childId: providerRelation.childId,
+        childName: provider.name,
+        childSlug: provider.slug,
+        note: providerRelation.note,
+        parentId: providerRelation.parentId,
+      })
+      .from(providerRelation)
+      .innerJoin(provider, eq(providerRelation.childId, provider.id));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export async function getProvidersByIds(ids: string[]): Promise<Provider[]> {
+  if (ids.length === 0) {
+    return [];
+  }
+
+  try {
+    return await db
+      .select()
+      .from(provider)
+      .where(inArray(provider.id, ids))
+      .orderBy(asc(provider.name));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export async function getProviderBySlug(
+  slug: string
+): Promise<Provider | undefined> {
+  try {
+    const [row] = await db
+      .select()
+      .from(provider)
+      .where(eq(provider.slug, slug))
+      .limit(1);
+    return row;
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export async function getBenefitsByProviderId(
+  providerId: string
+): Promise<Benefit[]> {
+  try {
+    return await db
+      .select()
+      .from(benefit)
+      .where(eq(benefit.providerId, providerId));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export async function getUserSubscriptions(
+  userId: string
+): Promise<UserSubscription[]> {
+  try {
+    return await db
+      .select()
+      .from(userSubscription)
+      .where(eq(userSubscription.userId, userId));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export async function getUserProviders(userId: string): Promise<Provider[]> {
+  try {
+    return await db
+      .select({
+        annualFee: provider.annualFee,
+        category: provider.category,
+        createdAt: provider.createdAt,
+        description: provider.description,
+        id: provider.id,
+        issuer: provider.issuer,
+        lastVerifiedAt: provider.lastVerifiedAt,
+        logo: provider.logo,
+        name: provider.name,
+        section: provider.section,
+        slug: provider.slug,
+        sourceType: provider.sourceType,
+        status: provider.status,
+        website: provider.website,
+      })
+      .from(userSubscription)
+      .innerJoin(provider, eq(userSubscription.providerId, provider.id))
+      .where(eq(userSubscription.userId, userId))
+      .orderBy(asc(provider.name));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export async function setUserSubscriptions({
+  userId,
+  providerIds,
+}: {
+  userId: string;
+  providerIds: string[];
+}) {
+  try {
+    await db
+      .delete(userSubscription)
+      .where(eq(userSubscription.userId, userId));
+
+    if (providerIds.length > 0) {
+      await db.insert(userSubscription).values(
+        providerIds.map((providerId) => ({
+          createdAt: new Date(),
+          providerId,
+          userId,
+        }))
+      );
+    }
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
+
+export type UserBenefit = Benefit & { providerName: string };
+
+export async function getBenefitsForProviderIds({
+  providerIds,
+  category,
+  query,
+  limit = 25,
+}: {
+  providerIds: string[];
+  category?: string;
+  query?: string;
+  limit?: number;
+}): Promise<UserBenefit[]> {
+  if (providerIds.length === 0) {
+    return [];
+  }
+
+  try {
+    const rows = await db
+      .select({
+        category: benefit.category,
+        details: benefit.details,
+        effectiveFrom: benefit.effectiveFrom,
+        effectiveTo: benefit.effectiveTo,
+        howToUse: benefit.howToUse,
+        id: benefit.id,
+        lastVerifiedAt: benefit.lastVerifiedAt,
+        providerId: benefit.providerId,
+        providerName: provider.name,
+        sourceSnippet: benefit.sourceSnippet,
+        sourceType: benefit.sourceType,
+        sourceUrl: benefit.sourceUrl,
+        status: benefit.status,
+        summary: benefit.summary,
+        tags: benefit.tags,
+        title: benefit.title,
+        value: benefit.value,
+        verifiedBy: benefit.verifiedBy,
+      })
+      .from(benefit)
+      .innerJoin(provider, eq(benefit.providerId, provider.id))
+      .where(inArray(benefit.providerId, providerIds));
+
+    if (!query) {
+      const byCategory = category
+        ? rows.filter((row) => row.category === category)
+        : rows;
+      return (byCategory.length > 0 ? byCategory : rows).slice(0, limit);
+    }
+
+    const terms = query
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((term) => term.length > 2);
+
+    if (terms.length === 0) {
+      const byCategory = category
+        ? rows.filter((row) => row.category === category)
+        : rows;
+      return (byCategory.length > 0 ? byCategory : rows).slice(0, limit);
+    }
+
+    // Score across ALL of the user's benefits so a narrow category hint can
+    // never hide a good keyword match; category is only a tie-breaker boost.
+    const scored = rows
+      .map((row) => {
+        const haystack = [
+          row.title,
+          row.summary,
+          row.details,
+          row.category,
+          row.providerName,
+          (row.tags ?? []).join(" "),
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        let score = terms.reduce(
+          (total, term) => (haystack.includes(term) ? total + 1 : total),
+          0
+        );
+
+        if (category && row.category === category) {
+          score += 0.5;
+        }
+
+        return { row, score };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    if (scored.length > 0) {
+      return scored.map((entry) => entry.row).slice(0, limit);
+    }
+
+    const byCategory = category
+      ? rows.filter((row) => row.category === category)
+      : rows;
+
+    return (byCategory.length > 0 ? byCategory : rows).slice(0, limit);
   } catch (error) {
     throw new ChatbotError("bad_request:database", { cause: error });
   }

@@ -1,0 +1,1 @@
+ALTER TABLE `Provider` ADD `section` text DEFAULT 'credit_card' NOT NULL;

@@ -1,51 +1,36 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
-import { guestRegex, isDevelopmentEnvironment } from "./lib/constants";
 
-export async function proxy(request: NextRequest) {
+const SECURITY_HEADERS: Record<string, string> = {
+  "Content-Security-Policy":
+    "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+};
+
+function withSecurityHeaders(response: NextResponse) {
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+    response.headers.set(key, value);
+  }
+  return response;
+}
+
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/ping")) {
     return new Response("pong", { status: 200 });
   }
 
-  if (pathname.startsWith("/api/auth")) {
-    return NextResponse.next();
-  }
-
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-    secureCookie: !isDevelopmentEnvironment,
-  });
-
-  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
-  if (!token) {
-    const redirectUrl = encodeURIComponent(new URL(request.url).pathname);
-
-    return NextResponse.redirect(
-      new URL(`${base}/api/auth/guest?redirectUrl=${redirectUrl}`, request.url)
-    );
-  }
-
-  const isGuest = guestRegex.test(token?.email ?? "");
-
-  if (token && !isGuest && ["/login", "/register"].includes(pathname)) {
-    return NextResponse.redirect(new URL(`${base}/`, request.url));
-  }
-
-  return NextResponse.next();
+  return withSecurityHeaders(NextResponse.next());
 }
 
 export const config = {
   matcher: [
     "/",
-    "/chat/:id",
     "/api/:path*",
-    "/login",
-    "/register",
-
     "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
   ],
 };

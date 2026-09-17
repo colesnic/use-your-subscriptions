@@ -1,43 +1,21 @@
-import { createClient } from "redis";
-
-import { isProductionEnvironment } from "@/lib/constants";
+import { env } from "cloudflare:workers";
 import { ChatbotError } from "@/lib/errors";
 
-const MAX_MESSAGES = 10;
-const TTL_SECONDS = 60 * 60;
-
-let client: ReturnType<typeof createClient> | null = null;
-
-function getClient() {
-  if (!client && process.env.REDIS_URL) {
-    client = createClient({ url: process.env.REDIS_URL });
-    client.on("error", () => undefined);
-    client.connect().catch(() => {
-      client = null;
-    });
-  }
-  return client;
-}
-
+/**
+ * Per-IP rate limiting using Cloudflare's Rate Limiting binding
+ * (`CHAT_RATE_LIMITER` in wrangler.jsonc). No-ops if the binding or IP is
+ * unavailable (e.g. local dev without the binding).
+ */
 export async function checkIpRateLimit(ip: string | undefined) {
-  if (!isProductionEnvironment || !ip) {
-    return;
-  }
+  const limiter = env.CHAT_RATE_LIMITER;
 
-  const redis = getClient();
-  if (!redis?.isReady) {
+  if (!(limiter && ip)) {
     return;
   }
 
   try {
-    const key = `ip-rate-limit:${ip}`;
-    const [count] = await redis
-      .multi()
-      .incr(key)
-      .expire(key, TTL_SECONDS, "NX")
-      .exec();
-
-    if (typeof count === "number" && count > MAX_MESSAGES) {
+    const { success } = await limiter.limit({ key: ip });
+    if (!success) {
       throw new ChatbotError("rate_limit:chat");
     }
   } catch (error) {

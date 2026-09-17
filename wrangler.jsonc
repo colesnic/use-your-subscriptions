@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "chatbot",
+  "compatibility_date": "2026-09-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "vinext/server/fetch-handler",
+  "assets": {
+    "directory": "dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS"
+  },
+  // Create with: `wrangler d1 create chatbot-db`
+  // then paste the returned database_id below.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "chatbot-db",
+      "database_id": "044a4885-5871-4ee4-af32-790c3e0eb6c0",
+      "migrations_dir": "lib/db/migrations"
+    }
+  ],
+  "vars": {
+    "NEXTJS_ENV": "production"
+  },
+  "ratelimits": [
+    {
+      "name": "CHAT_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 20,
+        "period": 60
+      }
+    }
+  ]
+}

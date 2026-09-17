@@ -13,6 +13,12 @@ export const messageMetadataSchema = z.object({
 
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
 
+/**
+ * Minimal session shape used by artifact/document tools. The app no longer has
+ * real auth; a fixed anonymous user id is used instead.
+ */
+export type AppSession = { user: { id: string } };
+
 type weatherTool = InferUITool<typeof getWeather>;
 type createDocumentTool = InferUITool<ReturnType<typeof createDocument>>;
 type updateDocumentTool = InferUITool<ReturnType<typeof updateDocument>>;

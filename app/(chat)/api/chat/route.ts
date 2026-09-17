@@ -1,18 +1,11 @@
-import { geolocation, ipAddress } from "@vercel/functions";
 import {
   convertToModelMessages,
   createUIMessageStream,
   createUIMessageStreamResponse,
-  generateId,
   isStepCount,
   streamText,
   toUIMessageStream,
 } from "ai";
-import { checkBotId } from "botid/server";
-import { after } from "next/server";
-import { createResumableStreamContext } from "resumable-stream";
-import { auth, type UserType } from "@/app/(auth)/auth";
-import { entitlementsByUserType } from "@/lib/ai/entitlements";
 import {
   allowedModelIds,
   chatModels,
@@ -22,29 +15,14 @@ import {
 } from "@/lib/ai/models";
 import { type RequestHints, systemPrompt } from "@/lib/ai/prompts";
 import { getLanguageModel } from "@/lib/ai/providers";
-import { createDocument } from "@/lib/ai/tools/create-document";
-import { editDocument } from "@/lib/ai/tools/edit-document";
 import { getWeather } from "@/lib/ai/tools/get-weather";
-import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
-import { updateDocument } from "@/lib/ai/tools/update-document";
+import { searchBenefits } from "@/lib/ai/tools/search-benefits";
 import { isProductionEnvironment } from "@/lib/constants";
-import {
-  createStreamId,
-  deleteChatById,
-  getChatById,
-  getMessageCountByUserId,
-  getMessagesByChatId,
-  saveChat,
-  saveMessages,
-  updateChatTitleById,
-  updateMessage,
-} from "@/lib/db/queries";
-import type { DBMessage } from "@/lib/db/schema";
+import { getProvidersByIds } from "@/lib/db/queries";
 import { ChatbotError } from "@/lib/errors";
 import { checkIpRateLimit } from "@/lib/ratelimit";
 import type { ChatMessage, WaitingStatusData } from "@/lib/types";
-import { convertToUIMessages, generateUUID } from "@/lib/utils";
-import { generateTitleFromUserMessage } from "../../actions";
+import { generateUUID } from "@/lib/utils";
 import { type PostRequestBody, postRequestBodySchema } from "./schema";
 
 export const maxDuration = 60;
@@ -57,16 +35,6 @@ function isModelStreamActivity(chunk: { type: string }) {
   );
 }
 
-function getStreamContext() {
-  try {
-    return createResumableStreamContext({ waitUntil: after });
-  } catch {
-    return null;
-  }
-}
-
-export { getStreamContext };
-
 export async function POST(request: Request) {
   let requestBody: PostRequestBody;
 
@@ -78,123 +46,42 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { id, message, messages, selectedChatModel, selectedVisibilityType } =
-      requestBody;
+    const { message, messages, selectedChatModel } = requestBody;
 
-    const [botIdResult, session] = await Promise.all([
-      checkBotId().catch(() => null),
-      auth(),
-    ]);
-
-    if (botIdResult?.isBot) {
-      return new ChatbotError("forbidden:api").toResponse();
-    }
-
-    if (!session?.user) {
-      return new ChatbotError("unauthorized:chat").toResponse();
-    }
-
+    // Anonymous app, no persistence.
     const chatModel = allowedModelIds.has(selectedChatModel)
       ? selectedChatModel
       : DEFAULT_CHAT_MODEL;
 
-    await checkIpRateLimit(ipAddress(request));
+    const clientIp =
+      request.headers.get("cf-connecting-ip") ??
+      request.headers.get("x-forwarded-for") ??
+      undefined;
 
-    const userType: UserType = session.user.type;
+    await checkIpRateLimit(clientIp);
 
-    const messageCount = await getMessageCountByUserId({
-      differenceInHours: 1,
-      id: session.user.id,
-    });
+    // Chats are not persisted: the client sends the full conversation every
+    // turn, so the server only needs what's in the request.
+    const uiMessages: ChatMessage[] = messages?.length
+      ? (messages as ChatMessage[])
+      : message
+        ? [message as ChatMessage]
+        : [];
 
-    if (messageCount > entitlementsByUserType[userType].maxMessagesPerHour) {
-      return new ChatbotError("rate_limit:chat").toResponse();
+    if (uiMessages.length === 0) {
+      return new ChatbotError("bad_request:api").toResponse();
     }
 
-    const isToolApprovalFlow = Boolean(messages);
-
-    const chat = await getChatById({ id });
-    let messagesFromDb: DBMessage[] = [];
-    let titlePromise: Promise<string> | null = null;
-
-    if (chat) {
-      if (chat.userId !== session.user.id) {
-        return new ChatbotError("forbidden:chat").toResponse();
-      }
-      messagesFromDb = await getMessagesByChatId({ id });
-    } else if (message?.role === "user") {
-      await saveChat({
-        id,
-        title: "New chat",
-        userId: session.user.id,
-        visibility: selectedVisibilityType,
-      });
-      titlePromise = generateTitleFromUserMessage({ message });
-    }
-
-    let uiMessages: ChatMessage[];
-
-    if (isToolApprovalFlow && messages) {
-      const dbMessages = convertToUIMessages(messagesFromDb);
-      const approvalStates = new Map(
-        messages.flatMap(
-          (m) =>
-            m.parts
-              ?.filter(
-                (p: Record<string, unknown>) =>
-                  p.state === "approval-responded" ||
-                  p.state === "output-denied"
-              )
-              .map((p: Record<string, unknown>) => [
-                String(p.toolCallId ?? ""),
-                p,
-              ]) ?? []
-        )
-      );
-      uiMessages = dbMessages.map((msg) => ({
-        ...msg,
-        parts: msg.parts.map((part) => {
-          if (
-            "toolCallId" in part &&
-            approvalStates.has(String(part.toolCallId))
-          ) {
-            return { ...part, ...approvalStates.get(String(part.toolCallId)) };
-          }
-          return part;
-        }),
-      })) as ChatMessage[];
-    } else {
-      uiMessages = [
-        ...convertToUIMessages(messagesFromDb),
-        message as ChatMessage,
-      ];
-    }
-
-    const { longitude, latitude, city, country } = geolocation(request);
-
-    const requestHints: RequestHints = {
-      city,
-      country,
-      latitude,
-      longitude,
-    };
-
-    if (message?.role === "user") {
-      await saveMessages({
-        messages: [
-          {
-            attachments: [],
-            chatId: id,
-            createdAt: new Date(),
-            id: message.id,
-            parts: message.parts,
-            role: "user",
-          },
-        ],
-      });
-    }
+    const requestHints: RequestHints = {};
 
     const modelConfig = chatModels.find((m) => m.id === chatModel);
+    const providerIds = requestBody.subscriptionIds ?? [];
+    const userProviders = await getProvidersByIds(providerIds);
+    const subscriptions = userProviders.map((provider) => ({
+      category: provider.category,
+      issuer: provider.issuer,
+      name: provider.name,
+    }));
     const modelCapabilities = await getCapabilities();
     const capabilities = modelCapabilities[chatModel];
     const isReasoningModel = capabilities?.reasoning === true;
@@ -203,7 +90,7 @@ export async function POST(request: Request) {
     const modelMessages = await convertToModelMessages(uiMessages);
 
     const stream = createUIMessageStream({
-      execute: async ({ writer: dataStream }) => {
+      execute: ({ writer: dataStream }) => {
         const modelName = modelConfig?.name ?? chatModel;
         let hasModelActivity = false;
         let healthCheckTimer: ReturnType<typeof setTimeout> | undefined;
@@ -270,14 +157,12 @@ export async function POST(request: Request) {
           activeTools:
             isReasoningModel && !supportsTools
               ? []
-              : [
-                  "getWeather",
-                  "createDocument",
-                  "editDocument",
-                  "updateDocument",
-                  "requestSuggestions",
-                ],
-          instructions: systemPrompt({ requestHints, supportsTools }),
+              : ["getWeather", "searchBenefits"],
+          instructions: systemPrompt({
+            requestHints,
+            subscriptions,
+            supportsTools,
+          }),
           messages: modelMessages,
           model: getLanguageModel(chatModel),
           onAbort() {
@@ -308,23 +193,8 @@ export async function POST(request: Request) {
             isEnabled: isProductionEnvironment,
           },
           tools: {
-            createDocument: createDocument({
-              dataStream,
-              modelId: chatModel,
-              session,
-            }),
-            editDocument: editDocument({ dataStream, session }),
             getWeather,
-            requestSuggestions: requestSuggestions({
-              dataStream,
-              modelId: chatModel,
-              session,
-            }),
-            updateDocument: updateDocument({
-              dataStream,
-              modelId: chatModel,
-              session,
-            }),
+            searchBenefits: searchBenefits({ providerIds }),
           },
         });
 
@@ -334,60 +204,8 @@ export async function POST(request: Request) {
             stream: result.stream,
           })
         );
-
-        if (titlePromise) {
-          try {
-            const title = await titlePromise;
-            dataStream.write({ data: title, type: "data-chat-title" });
-            updateChatTitleById({ chatId: id, title });
-          } catch {
-            /* non-fatal */
-          }
-        }
       },
       generateId: generateUUID,
-      onEnd: async ({ messages: finishedMessages }) => {
-        if (isToolApprovalFlow) {
-          await Promise.all(
-            finishedMessages.map(async (finishedMsg) => {
-              const existingMsg = uiMessages.find(
-                (m) => m.id === finishedMsg.id
-              );
-              if (existingMsg) {
-                await updateMessage({
-                  id: finishedMsg.id,
-                  parts: finishedMsg.parts,
-                });
-                return;
-              }
-
-              await saveMessages({
-                messages: [
-                  {
-                    attachments: [],
-                    chatId: id,
-                    createdAt: new Date(),
-                    id: finishedMsg.id,
-                    parts: finishedMsg.parts,
-                    role: finishedMsg.role,
-                  },
-                ],
-              });
-            })
-          );
-        } else if (finishedMessages.length > 0) {
-          await saveMessages({
-            messages: finishedMessages.map((currentMessage) => ({
-              attachments: [],
-              chatId: id,
-              createdAt: new Date(),
-              id: currentMessage.id,
-              parts: currentMessage.parts,
-              role: currentMessage.role,
-            })),
-          });
-        }
-      },
       onError: (error) => {
         if (
           error instanceof Error &&
@@ -399,30 +217,10 @@ export async function POST(request: Request) {
         }
         return "Oops, an error occurred!";
       },
-      originalMessages: isToolApprovalFlow ? uiMessages : undefined,
+      originalMessages: uiMessages,
     });
 
-    return createUIMessageStreamResponse({
-      async consumeSseStream({ stream: sseStream }) {
-        if (!process.env.REDIS_URL) {
-          return;
-        }
-        try {
-          const streamContext = getStreamContext();
-          if (streamContext) {
-            const streamId = generateId();
-            await createStreamId({ chatId: id, streamId });
-            await streamContext.createNewResumableStream(
-              streamId,
-              () => sseStream
-            );
-          }
-        } catch {
-          /* non-critical */
-        }
-      },
-      stream,
-    });
+    return createUIMessageStreamResponse({ stream });
   } catch (error) {
     const vercelId = request.headers.get("x-vercel-id");
 
@@ -442,29 +240,4 @@ export async function POST(request: Request) {
     console.error("Unhandled error in chat API:", error, { vercelId });
     return new ChatbotError("offline:chat").toResponse();
   }
-}
-
-export async function DELETE(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-
-  if (!id) {
-    return new ChatbotError("bad_request:api").toResponse();
-  }
-
-  const session = await auth();
-
-  if (!session?.user) {
-    return new ChatbotError("unauthorized:chat").toResponse();
-  }
-
-  const chat = await getChatById({ id });
-
-  if (chat?.userId !== session.user.id) {
-    return new ChatbotError("forbidden:chat").toResponse();
-  }
-
-  const deletedChat = await deleteChatById({ id });
-
-  return Response.json(deletedChat, { status: 200 });
 }

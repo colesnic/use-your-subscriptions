@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { MAX_MESSAGE_LENGTH } from "@/lib/constants";
 
 const textPartSchema = z.object({
-  text: z.string().min(1).max(2000),
+  text: z.string().min(1).max(MAX_MESSAGE_LENGTH),
   type: z.enum(["text"]),
 });
 
@@ -32,6 +33,7 @@ export const postRequestBodySchema = z.object({
   messages: z.array(toolApprovalMessageSchema).optional(),
   selectedChatModel: z.string(),
   selectedVisibilityType: z.enum(["public", "private"]),
+  subscriptionIds: z.array(z.string()).optional(),
 });
 
 export type PostRequestBody = z.infer<typeof postRequestBodySchema>;

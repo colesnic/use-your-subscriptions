@@ -1,6 +1,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { ArrowDownIcon } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
+import { SubscriptionPromptCard } from "@/components/subscriptions/subscriptions-dialog";
 import { useMessages } from "@/hooks/use-messages";
 import type { Vote } from "@/lib/db/schema";
 import type { ChatMessage } from "@/lib/types";
@@ -66,8 +67,9 @@ function PureMessages({
   return (
     <div className="relative flex-1 bg-background">
       {messages.length === 0 && !isLoading && (
-        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 px-4">
           <Greeting />
+          <SubscriptionPromptCard />
         </div>
       )}
       <div

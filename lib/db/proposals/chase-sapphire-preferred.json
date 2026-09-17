@@ -1,0 +1,228 @@
+{
+  "changed": [
+    {
+      "existingTitle": "Primary Auto Rental Coverage",
+      "proposed": {
+        "category": "car_rental",
+        "details": "Coverage is primary and provides reimbursement up to $60,000 for theft and collision damage for most rental vehicles with an MSRP of $125,000 or less. You must decline the rental company's collision insurance and charge the entire rental cost to your card.",
+        "howToUse": "Decline the rental company's collision insurance and charge the entire rental cost to your Chase Sapphire Preferred card.",
+        "summary": "Primary coverage for theft and collision damage when you rent a vehicle and charge the entire rental cost to your card.",
+        "tags": ["auto rental", "collision", "theft", "primary coverage"],
+        "title": "Primary Auto Rental Coverage",
+        "value": "Up to $60,000 coverage"
+      }
+    },
+    {
+      "existingTitle": "Purchase Protection",
+      "proposed": {
+        "category": "shopping",
+        "details": "Coverage is up to $500 per item. For New York residents, the coverage period is 90 days from the date of purchase.",
+        "howToUse": "Use your Chase Sapphire Preferred card for the purchase. If damage or theft occurs, file a claim according to the Guide to Benefits.",
+        "summary": "Covers eligible new purchases against damage or theft for 120 days from the date of purchase.",
+        "tags": ["purchase protection", "damage", "theft", "shopping"],
+        "title": "Purchase Protection",
+        "value": "Up to $500 per item"
+      }
+    },
+    {
+      "existingTitle": "Trip protection",
+      "proposed": {
+        "category": "travel",
+        "details": "Trip Cancellation and Interruption Insurance reimburses up to $10,000 per covered traveler and $20,000 per trip for pre-paid, non-refundable travel expenses if your trip is canceled or cut short by sickness, severe weather, or other covered situations. Trip Delay Reimbursement covers up to $500 per covered traveler for unreimbursed expenses such as meals and lodging if common carrier travel is delayed more than 12 hours or requires an overnight stay. Travel Accident Insurance provides up to $500,000 in accidental death or dismemberment coverage when you pay for air, bus, train, or cruise transportation with your card.",
+        "howToUse": "Use your card to pay for travel expenses. If a covered event occurs, file a claim as per the Guide to Benefits.",
+        "summary": "Provides trip cancellation and interruption insurance, trip delay reimbursement, and travel accident insurance.",
+        "tags": [
+          "trip cancellation",
+          "trip interruption",
+          "trip delay",
+          "travel accident",
+          "insurance"
+        ],
+        "title": "Trip protection",
+        "value": "Up to $20,000 per trip for cancellation/interruption; up to $500 per traveler for delays; up to $500,000 for travel accident"
+      }
+    },
+    {
+      "existingTitle": "Travel credits",
+      "proposed": {
+        "category": "travel",
+        "details": "A statement credit will automatically be applied when your card is used for hotel accommodation purchases made through Chase Travel, up to an annual maximum of $100. The first $100 in Chase Travel hotel purchases will not earn rewards points.",
+        "howToUse": "Book hotel stays through Chase Travel using your Chase Sapphire Preferred card. The statement credit is applied automatically.",
+        "summary": "Receive up to $100 in statement credits each account anniversary year for hotel stays purchased through Chase Travel.",
+        "tags": ["hotel credit", "Chase Travel", "statement credit"],
+        "title": "Travel credits",
+        "value": "$100/year"
+      }
+    },
+    {
+      "existingTitle": "DoorDash DashPass and credits",
+      "proposed": {
+        "category": "dining",
+        "details": "Get a complimentary DashPass membership (a $120 value for 12 months) when activated by 12/31/2027. Plus, DashPass members get a $10 promo each month ($120 annually) to save on groceries, retail orders, and more through December 31, 2027. The $10 monthly discount applies to one qualifying non-restaurant order on DoorDash, subtotal only, and must be claimed at checkout.",
+        "howToUse": "Activate DashPass by adding your Chase Sapphire Preferred card as the default payment method on DoorDash or Caviar and clicking the activation button. Use the card at checkout to receive the monthly $10 discount.",
+        "summary": "Complimentary DashPass membership for at least 12 months and a $10 monthly promo on non-restaurant orders.",
+        "tags": ["DoorDash", "DashPass", "delivery", "dining", "credits"],
+        "title": "DoorDash DashPass and credits",
+        "value": "$120/year DashPass + $120/year in monthly credits"
+      }
+    }
+  ],
+  "changes": {
+    "added": 15,
+    "changed": 5,
+    "missing": 0
+  },
+  "currentBenefitCount": 5,
+  "extractedBenefitCount": 20,
+  "fetchedAt": "2026-09-16T01:46:19.284Z",
+  "missing": [],
+  "newBenefits": [
+    {
+      "category": "travel",
+      "details": "You will receive one statement credit every four years (up to $120) after the first program (either Global Entry or TSA PreCheck or NEXUS) application fee is charged to your Chase Sapphire Preferred card. This benefit applies only to those programs and only for purchases made directly with the U.S. Department of Homeland Security, eligible partner listed on ttp.cbp.dhs.gov, or authorized enrollment providers featured on tsa.gov/precheck.",
+      "howToUse": "Charge the application fee directly to your card with the eligible program. The statement credit will appear within 1-2 billing cycles.",
+      "summary": "Receive one statement credit of up to $120 every four years for the application fee for Global Entry, TSA PreCheck, or NEXUS.",
+      "tags": [
+        "Global Entry",
+        "TSA PreCheck",
+        "NEXUS",
+        "statement credit",
+        "travel"
+      ],
+      "title": "Global Entry or TSA PreCheck or NEXUS Application Fee Credit",
+      "value": "Up to $120 every 4 years"
+    },
+    {
+      "category": "streaming",
+      "details": "One-time activation on chase.com or the Chase Mobile app required by December 31, 2026. You, as the primary cardmember, will receive at least 12 months of complimentary Apple TV from the activation date. If you have an active paid Apple TV subscription purchased directly through Apple, your complimentary subscription will automatically suspend your existing subscription. If you have an active paid Apple One subscription, you will automatically receive a $7.50 discount on your Apple One subscription starting on your next billing period.",
+      "howToUse": "Activate the benefit on chase.com or the Chase Mobile app by December 31, 2026.",
+      "summary": "Get a year of complimentary Apple TV when activated by December 31, 2026.",
+      "tags": ["Apple TV", "streaming", "entertainment", "subscription"],
+      "title": "Apple TV+ Complimentary Subscription",
+      "value": "$156/year"
+    },
+    {
+      "category": "shopping",
+      "details": "You'll earn a total of 5 points for each $1 spent on up to $5,000 in total purchases when your card is used for Peloton equipment and accessory purchases over $150 through Peloton from 4/1/2025 through 12/31/2027. Only purchases made directly through Peloton - through onepeloton.com, over the phone, or in a Peloton showroom - are eligible. Gift cards and apparel are not eligible.",
+      "howToUse": "Use your Chase Sapphire Preferred card for eligible Peloton purchases directly through Peloton.",
+      "summary": "Earn 5x total points on eligible Peloton equipment and accessory purchases over $150 through 12/31/27.",
+      "tags": ["Peloton", "rewards", "points", "fitness"],
+      "title": "5x points on Peloton purchases",
+      "value": "5x points"
+    },
+    {
+      "category": "travel",
+      "details": "You'll earn 5X points on qualifying Lyft products and services purchased through the Lyft mobile application through 09/30/2027. That's 3 additional points on top of the 2 points earned on travel purchases in the rewards program. Qualifying Lyft products and services include rideshare; bike and scooter rides; and subscription and membership products. Purchase of gift cards, car rentals, vehicle service centers, miscellaneous fees and other Lyft products and services are excluded.",
+      "howToUse": "Use your Chase Sapphire Preferred card to pay for Lyft rides through the Lyft app.",
+      "summary": "Earn 5x total points on Lyft rides through September 30, 2027.",
+      "tags": ["Lyft", "rideshare", "rewards", "points", "travel"],
+      "title": "5x points on Lyft rides",
+      "value": "5x points"
+    },
+    {
+      "category": "travel",
+      "details": "Reimburses you up to $100 a day for up to 5 days for essential purchases like toiletries and clothing when baggage is delayed over 6 hours.",
+      "howToUse": "Use your card for travel expenses. If baggage is delayed, file a claim as per the Guide to Benefits.",
+      "summary": "Reimburses up to $100 a day for up to 5 days for essential purchases when baggage is delayed over 6 hours.",
+      "tags": ["baggage delay", "insurance", "travel"],
+      "title": "Baggage Delay Insurance",
+      "value": "Up to $500 total"
+    },
+    {
+      "category": "travel",
+      "details": "Provides reimbursement up to $3,000 per covered traveler for the cost to repair or replace checked or carry-on baggage that is lost, damaged or stolen during a covered trip. For New York residents, coverage is limited to $2,000 per bag and $10,000 for all covered travelers per trip.",
+      "howToUse": "Use your card for travel expenses. If baggage is lost, damaged, or stolen, file a claim as per the Guide to Benefits.",
+      "summary": "Provides reimbursement up to $3,000 per covered traveler for lost, damaged, or stolen baggage during a covered trip.",
+      "tags": ["lost luggage", "insurance", "travel"],
+      "title": "Lost Luggage Reimbursement",
+      "value": "Up to $3,000 per traveler"
+    },
+    {
+      "category": "shopping",
+      "details": "Extends the time period of the manufacturer's U.S. warranty by an additional year, on eligible warranties of three years or less, up to four years from the date of purchase.",
+      "howToUse": "Use your card for the purchase. If a covered item needs repair after the manufacturer's warranty expires, file a claim as per the Guide to Benefits.",
+      "summary": "Extends the manufacturer's U.S. warranty by an additional year on eligible warranties of three years or less.",
+      "tags": ["extended warranty", "shopping", "protection"],
+      "title": "Extended Warranty Protection",
+      "value": "Additional year of warranty"
+    },
+    {
+      "category": "travel",
+      "details": "If you or a covered traveler are injured or become sick during a trip 100 miles or more from home that results in an emergency evacuation, you can be covered for medical services and transportation up to $100,000.",
+      "howToUse": "Use your card for travel expenses. If an emergency evacuation occurs, file a claim as per the Guide to Benefits.",
+      "summary": "Covers medical services and transportation up to $100,000 if you are injured or become sick during a trip 100 miles or more from home and require emergency evacuation.",
+      "tags": ["emergency evacuation", "insurance", "travel"],
+      "title": "Emergency Evacuation and Transportation",
+      "value": "Up to $100,000"
+    },
+    {
+      "category": "travel",
+      "details": "If you run into a problem while traveling away from home, this benefit provides legal and medical referrals and access to other travel and emergency assistance services. You will be responsible for the cost of any goods or services obtained.",
+      "howToUse": "Call the number on the back of your card for assistance.",
+      "summary": "Provides legal and medical referrals and access to other travel and emergency assistance services when you run into a problem while traveling away from home.",
+      "tags": ["travel assistance", "emergency", "referrals"],
+      "title": "Travel and Emergency Assistance",
+      "value": "Assistance services"
+    },
+    {
+      "category": "car_rental",
+      "details": "If you have a roadside emergency, call the service provider to dispatch the help you need. Roadside service fees will be billed to your card at time of dispatch.",
+      "howToUse": "Call the service provider as per the Guide to Benefits.",
+      "summary": "Provides access to roadside assistance services when you have a roadside emergency; fees billed to your card.",
+      "tags": ["roadside assistance", "emergency", "auto"],
+      "title": "Roadside Assistance",
+      "value": "Dispatch service"
+    },
+    {
+      "category": "travel",
+      "details": "You will pay no foreign transaction fees when you use your card for purchases made outside the United States.",
+      "howToUse": "Use your card internationally.",
+      "summary": "Pay no foreign transaction fees on purchases made outside the United States.",
+      "tags": ["foreign transaction", "fees", "international"],
+      "title": "No Foreign Transaction Fees",
+      "value": "No fees"
+    },
+    {
+      "category": "everyday",
+      "details": "Enjoy 24/7 access to a customer service specialist from virtually anywhere in the world.",
+      "howToUse": "Call the number on the back of your card.",
+      "summary": "Enjoy 24/7 access to a customer service specialist from virtually anywhere in the world.",
+      "tags": ["customer service", "support"],
+      "title": "24/7 Access to a Customer Service Specialist",
+      "value": "24/7 support"
+    },
+    {
+      "category": "everyday",
+      "details": "Apply for a card, use it the same day. Receive instant access to your card by adding it to a digital wallet, like Apple Pay, Google Pay or Samsung Pay.",
+      "howToUse": "Add your card to a digital wallet via the Chase Mobile app.",
+      "summary": "Receive instant access to your card by adding it to a digital wallet like Apple Pay, Google Pay, or Samsung Pay.",
+      "tags": ["digital wallet", "instant access"],
+      "title": "Instant Card Access",
+      "value": "Immediate use"
+    },
+    {
+      "category": "security",
+      "details": "Chase Credit Journey is more than a free credit score. By enrolling in identity monitoring, you can receive alerts when your information is found on the dark web or in a data breach. If your data is stolen, assistance is available, including coverage for select out-of-pocket costs and help if you lose your wallet.",
+      "howToUse": "Enroll in Chase Credit Journey.",
+      "summary": "Free credit score and identity monitoring with alerts for dark web activity and assistance if identity theft occurs.",
+      "tags": ["credit score", "identity monitoring", "security"],
+      "title": "Chase Credit Journey",
+      "value": "Free"
+    },
+    {
+      "category": "everyday",
+      "details": "Chase Pay Over Time lets eligible Chase customers break up credit card purchases into budget friendly payments. After purchase: Pay off an eligible purchase of $100 or more in smaller, equal monthly payments with a fixed monthly fee and plan durations from 3-24 months. At checkout: Orders totaling $50 or more using your eligible Chase credit card at Amazon.com could be eligible for Chase Pay Over Time.",
+      "howToUse": "Select an eligible purchase with the 'Pay Over Time' option in your credit card activity or at checkout on Amazon.com.",
+      "summary": "Break up eligible credit card purchases into budget-friendly monthly payments with fixed fees.",
+      "tags": ["pay over time", "installments", "financing"],
+      "title": "Chase Pay Over Time",
+      "value": "Flexible payments"
+    }
+  ],
+  "provider": "Chase Sapphire Preferred",
+  "providerSlug": "chase-sapphire-preferred",
+  "sourceUrls": [
+    "https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred"
+  ],
+  "status": "needs-review"
+}

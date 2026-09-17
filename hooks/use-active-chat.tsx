@@ -3,7 +3,6 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { usePathname } from "next/navigation";
 import {
   createContext,
   type Dispatch,
@@ -15,18 +14,15 @@ import {
   useRef,
   useState,
 } from "react";
-import useSWR, { useSWRConfig } from "swr";
-import { unstable_serialize } from "swr/infinite";
 import { useDataStream } from "@/components/chat/data-stream-provider";
-import { getChatHistoryPaginationKey } from "@/components/chat/sidebar-history";
 import { toast } from "@/components/chat/toast";
 import type { VisibilityType } from "@/components/chat/visibility-selector";
-import { useAutoResume } from "@/hooks/use-auto-resume";
 import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
 import type { Vote } from "@/lib/db/schema";
 import { ChatbotError } from "@/lib/errors";
+import { getSelectedSubscriptionIds } from "@/lib/subscriptions";
 import type { ChatMessage } from "@/lib/types";
-import { fetcher, fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
+import { fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
 
 type ActiveChatContextValue = {
   chatId: string;
@@ -51,27 +47,12 @@ type ActiveChatContextValue = {
 
 const ActiveChatContext = createContext<ActiveChatContextValue | null>(null);
 
-function extractChatId(pathname: string): string | null {
-  const match = pathname.match(/\/chat\/([^/]+)/);
-  return match ? match[1] : null;
-}
-
 export function ActiveChatProvider({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
   const { setDataStream, setWaitingStatus } = useDataStream();
-  const { mutate } = useSWRConfig();
 
-  const chatIdFromUrl = extractChatId(pathname);
-  const isNewChat = !chatIdFromUrl;
-  const newChatIdRef = useRef(generateUUID());
-  const prevPathnameRef = useRef(pathname);
-
-  if (isNewChat && prevPathnameRef.current !== pathname) {
-    newChatIdRef.current = generateUUID();
-  }
-  prevPathnameRef.current = pathname;
-
-  const chatId = chatIdFromUrl ?? newChatIdRef.current;
+  // Single-page, no persistence: one in-memory conversation per page load.
+  const chatIdRef = useRef(generateUUID());
+  const chatId = chatIdRef.current;
 
   const [currentModelId, setCurrentModelId] = useState(DEFAULT_CHAT_MODEL);
   const currentModelIdRef = useRef(currentModelId);
@@ -82,21 +63,6 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
   const [input, setInput] = useState("");
   const [showCreditCardAlert, setShowCreditCardAlert] = useState(false);
 
-  const { data: chatData, isLoading } = useSWR(
-    isNewChat
-      ? null
-      : `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/messages?chatId=${chatId}`,
-    fetcher,
-    { revalidateOnFocus: false }
-  );
-
-  const initialMessages: ChatMessage[] = isNewChat
-    ? []
-    : (chatData?.messages ?? []);
-  const visibility: VisibilityType = isNewChat
-    ? "private"
-    : (chatData?.visibility ?? "private");
-
   const {
     messages,
     setMessages,
@@ -104,12 +70,10 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
     status,
     stop,
     regenerate,
-    resumeStream,
     addToolApprovalResponse,
   } = useChat<ChatMessage>({
     generateId: generateUUID,
     id: chatId,
-    messages: initialMessages,
     onData: (dataPart) => {
       if (dataPart.type === "data-waiting-status") {
         setWaitingStatus(dataPart.data);
@@ -129,9 +93,6 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
         });
       }
     },
-    onFinish: () => {
-      mutate(unstable_serialize(getChatHistoryPaginationKey));
-    },
     sendAutomaticallyWhen: ({ messages: currentMessages }) => {
       const lastMessage = currentMessages.at(-1);
       return (
@@ -148,26 +109,15 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
       api: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/chat`,
       fetch: fetchWithErrorHandlers,
       prepareSendMessagesRequest(request) {
-        const lastMessage = request.messages.at(-1);
-        const isToolApprovalContinuation =
-          lastMessage?.role !== "user" ||
-          request.messages.some((msg) =>
-            msg.parts?.some((part) => {
-              const { state } = part as { state?: string };
-              return (
-                state === "approval-responded" || state === "output-denied"
-              );
-            })
-          );
-
+        // Send the full conversation every time; the server does not persist
+        // or reload chat history.
         return {
           body: {
             id: request.id,
-            ...(isToolApprovalContinuation
-              ? { messages: request.messages }
-              : { message: lastMessage }),
+            messages: request.messages,
             selectedChatModel: currentModelIdRef.current,
-            selectedVisibilityType: visibility,
+            selectedVisibilityType: "private",
+            subscriptionIds: getSelectedSubscriptionIds(),
             ...request.body,
           },
         };
@@ -181,87 +131,14 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
     }
   }, [status, setWaitingStatus]);
 
-  const loadedChatIds = useRef(new Set<string>());
-
-  if (isNewChat && !loadedChatIds.current.has(newChatIdRef.current)) {
-    loadedChatIds.current.add(newChatIdRef.current);
-  }
-
-  useEffect(() => {
-    if (loadedChatIds.current.has(chatId)) {
-      return;
-    }
-    if (chatData?.messages) {
-      loadedChatIds.current.add(chatId);
-      setMessages(chatData.messages);
-    }
-  }, [chatId, chatData?.messages, setMessages]);
-
-  const prevChatIdRef = useRef(chatId);
-  useEffect(() => {
-    if (prevChatIdRef.current !== chatId) {
-      prevChatIdRef.current = chatId;
-      if (isNewChat) {
-        setMessages([]);
-      }
-    }
-  }, [chatId, isNewChat, setMessages]);
-
-  useEffect(() => {
-    if (chatData && !isNewChat) {
-      const cookieModel = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("chat-model="))
-        ?.split("=")[1];
-      if (cookieModel) {
-        setCurrentModelId(decodeURIComponent(cookieModel));
-      }
-    }
-  }, [chatData, isNewChat]);
-
-  const hasAppendedQueryRef = useRef(false);
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get("query");
-    if (query && !hasAppendedQueryRef.current) {
-      hasAppendedQueryRef.current = true;
-      window.history.replaceState(
-        {},
-        "",
-        `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/chat/${chatId}`
-      );
-      sendMessage({
-        parts: [{ text: query, type: "text" }],
-        role: "user" as const,
-      });
-    }
-  }, [sendMessage, chatId]);
-
-  useAutoResume({
-    autoResume: !isNewChat && !!chatData,
-    initialMessages,
-    resumeStream,
-    setMessages,
-  });
-
-  const isReadonly = isNewChat ? false : (chatData?.isReadonly ?? false);
-
-  const { data: votes } = useSWR<Vote[]>(
-    !isReadonly && messages.length >= 2
-      ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/vote?chatId=${chatId}`
-      : null,
-    fetcher,
-    { revalidateOnFocus: false }
-  );
-
   const value = useMemo<ActiveChatContextValue>(
     () => ({
       addToolApprovalResponse,
       chatId,
       currentModelId,
       input,
-      isLoading: !isNewChat && isLoading,
-      isReadonly,
+      isLoading: false,
+      isReadonly: false,
       messages,
       regenerate,
       sendMessage,
@@ -272,26 +149,21 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
       showCreditCardAlert,
       status,
       stop,
-      visibilityType: visibility,
-      votes,
+      visibilityType: "private",
+      votes: undefined,
     }),
     [
+      addToolApprovalResponse,
       chatId,
+      currentModelId,
+      input,
       messages,
-      setMessages,
+      regenerate,
       sendMessage,
+      setMessages,
+      showCreditCardAlert,
       status,
       stop,
-      regenerate,
-      addToolApprovalResponse,
-      input,
-      visibility,
-      isReadonly,
-      isNewChat,
-      isLoading,
-      votes,
-      currentModelId,
-      showCreditCardAlert,
     ]
   );
 

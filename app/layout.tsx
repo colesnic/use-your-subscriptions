@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Fraunces, Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   description: "Next.js chatbot template using the AI SDK.",
@@ -12,14 +11,28 @@ export const metadata: Metadata = {
   title: "Next.js Chatbot Template",
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   maximumScale: 1,
+  viewportFit: "cover",
 };
 
-const geist = Geist({
+const inter = Inter({
   display: "swap",
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
+});
+
+const fraunces = Fraunces({
+  axes: ["SOFT", "WONK", "opsz"],
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 const geistMono = Geist_Mono({
@@ -55,7 +68,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      className={`${geist.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${fraunces.variable} ${spaceGrotesk.variable} ${geistMono.variable}`}
       lang="en"
       suppressHydrationWarning
     >
@@ -74,11 +87,7 @@ export default function RootLayout({
           disableTransitionOnChange
           enableSystem
         >
-          <SessionProvider
-            basePath={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/auth`}
-          >
-            <TooltipProvider>{children}</TooltipProvider>
-          </SessionProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

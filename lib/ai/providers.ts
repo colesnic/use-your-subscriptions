@@ -1,6 +1,11 @@
-import { customProvider, gateway } from "ai";
+import { createDeepSeek } from "@ai-sdk/deepseek";
+import { customProvider } from "ai";
 import { isTestEnvironment } from "../constants";
 import { titleModel } from "./models";
+
+const deepseek = createDeepSeek({
+  apiKey: process.env.DEEPSEEK_API_KEY ?? "",
+});
 
 export const myProvider = isTestEnvironment
   ? (() => {
@@ -17,17 +22,23 @@ export const myProvider = isTestEnvironment
     })()
   : null;
 
+function toProviderModelId(modelId: string) {
+  return modelId.includes("/")
+    ? modelId.split("/").slice(1).join("/")
+    : modelId;
+}
+
 export function getLanguageModel(modelId: string) {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel(modelId);
   }
 
-  return gateway.languageModel(modelId);
+  return deepseek(toProviderModelId(modelId));
 }
 
 export function getTitleModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("title-model");
   }
-  return gateway.languageModel(titleModel.id);
+  return deepseek(toProviderModelId(titleModel.id));
 }

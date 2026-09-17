@@ -1,5 +1,3 @@
-import { generateDummyPassword } from "./db/utils";
-
 export const isProductionEnvironment = process.env.NODE_ENV === "production";
 export const isDevelopmentEnvironment = process.env.NODE_ENV === "development";
 export const isTestEnvironment = Boolean(
@@ -10,11 +8,17 @@ export const isTestEnvironment = Boolean(
 
 export const guestRegex = /^guest-\d+$/;
 
-export const DUMMY_PASSWORD = generateDummyPassword();
+export const MAX_MESSAGE_LENGTH = 200;
+
+/**
+ * The app is anonymous (no auth). Documents/artifacts are attributed to this
+ * fixed user id, which is seeded into the DB.
+ */
+export const ANONYMOUS_USER_ID = "00000000-0000-4000-8000-000000000000";
 
 export const suggestions = [
-  "What are the advantages of using Next.js?",
-  "Write code to demonstrate Dijkstra's algorithm",
-  "Help me write an essay about Silicon Valley",
-  "What is the weather in San Francisco?",
+  "I need to rent a car",
+  "I dropped my phone",
+  "How can I get cheaper gas",
+  "What card do I use for groceries",
 ];

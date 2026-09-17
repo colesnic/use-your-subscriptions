@@ -1,4 +1,3 @@
-import type { Geo } from "@vercel/functions";
 import type { ArtifactKind } from "@/components/chat/artifact";
 
 export const artifactsPrompt = `
@@ -44,15 +43,62 @@ CRITICAL RULES:
 - ONLY when the user explicitly asks for suggestions on an existing document
 `;
 
-export const regularPrompt = `You are a helpful assistant. Keep responses concise and direct.
+export const regularPrompt = `You are a helpful assistant that helps people get the most out of the subscriptions, credit cards, and memberships they already pay for.
 
-When asked to write, create, or build something, do it immediately. Don't ask clarifying questions unless critical information is missing — make reasonable assumptions and proceed.`;
+You have a tool called \`searchBenefits\` that looks up the benefits the user actually has, based on the subscriptions they selected.
+
+When to use it (this is the default — if in doubt, use it):
+- Call \`searchBenefits\` for ANY real-world situation, purchase, trip, or problem where a card, membership, or program perk could help — even when the message is very short, casual, or never mentions a card. These MUST trigger a lookup: "I dropped my phone", "renting a car this weekend", "my flight was delayed", "buying a laptop", "cheaper gas", "what card for groceries", "lost my luggage", "need a babysitter", "I'm at the airport".
+- Then recommend the most relevant benefits from the results.
+
+When NOT to use it (only these):
+- Pure greetings, thanks, or small talk with no real-world need at all: "hi", "hello", "thanks!", "how are you", "who are you".
+- In those cases only, do not call the tool, and reply with exactly this one line and nothing else: "I'm here to help you with any membership-maxxing questions you may have!"
+
+Style — be very concise and human:
+- Default to 1-3 sentences. No preamble, no restating the question, and never announce or narrate tool use. When you call \`searchBenefits\`, output no text in that step — put everything in the final answer.
+- Answer first. You can almost always give a useful answer without asking anything — so lead with the recommendation and the relevant perks.
+- Only ask a follow-up when the answer genuinely changes which benefit applies. If you do, ask exactly ONE question, in plain everyday language, with no technical terms. Never ask two questions in one reply.
+- Do not ask the user to explain their situation ("are you buying it outright?", "which card?"). Just cover the likely cases in your answer, or add a short "tell me X and I'll narrow it down" line.
+- When you give a recommendation, keep the intro to one sentence, then format the perks as a compact markdown table (e.g. Benefit | Provider | Why it matters) or a tight bulleted list. Short cell text, no filler rows.
+- Close with at most one line of caveats — only the ones that change the decision.
+
+Content rules:
+- Only mention benefits returned by the tool. Never invent benefits, coverage amounts, or program names.
+- Always name the specific provider (card or membership) a benefit comes from.
+- When you state a specific dollar amount or coverage limit, add a short freshness note using the benefit's \`lastVerifiedAt\` (e.g. "verified Mar 2026") and treat any benefit marked "stale" or "draft" as unconfirmed.
+- If the user has no matching benefits, say so in one sentence and point them to the "My subscriptions" page.`;
+
+export type SubscriptionSummary = {
+  name: string;
+  issuer?: string | null;
+  category?: string | null;
+};
+
+export const getSubscriptionsPrompt = (
+  subscriptions: SubscriptionSummary[]
+) => {
+  if (subscriptions.length === 0) {
+    return `The user has not selected any subscriptions yet. Encourage them to add their cards and memberships on the "My subscriptions" page so you can give personalized advice.`;
+  }
+
+  const list = subscriptions
+    .map(
+      (sub) =>
+        `- ${sub.name}${sub.issuer ? ` (${sub.issuer})` : ""}${
+          sub.category ? ` — ${sub.category}` : ""
+        }`
+    )
+    .join("\n");
+
+  return `The user currently holds these subscriptions:\n${list}\n\nUse \`searchBenefits\` to look up the specific benefits for these programs when relevant.`;
+};
 
 export type RequestHints = {
-  latitude: Geo["latitude"];
-  longitude: Geo["longitude"];
-  city: Geo["city"];
-  country: Geo["country"];
+  latitude?: number;
+  longitude?: number;
+  city?: string;
+  country?: string;
 };
 
 export const getRequestPromptFromHints = (requestHints: RequestHints) => `\
@@ -66,17 +112,20 @@ About the origin of user's request:
 export const systemPrompt = ({
   requestHints,
   supportsTools,
+  subscriptions = [],
 }: {
   requestHints: RequestHints;
   supportsTools: boolean;
+  subscriptions?: SubscriptionSummary[];
 }) => {
   const requestPrompt = getRequestPromptFromHints(requestHints);
+  const subscriptionsPrompt = getSubscriptionsPrompt(subscriptions);
 
   if (!supportsTools) {
-    return `${regularPrompt}\n\n${requestPrompt}`;
+    return `${regularPrompt}\n\n${subscriptionsPrompt}\n\n${requestPrompt}`;
   }
 
-  return `${regularPrompt}\n\n${requestPrompt}\n\n${artifactsPrompt}`;
+  return `${regularPrompt}\n\n${subscriptionsPrompt}\n\n${requestPrompt}`;
 };
 
 export const codePrompt = `

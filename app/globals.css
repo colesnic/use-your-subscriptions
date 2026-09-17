@@ -9,6 +9,14 @@
 @plugin "@tailwindcss/typography";
 
 @theme inline {
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-serif:
+    var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+  --font-grotesk:
+    var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -47,38 +55,39 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.985 0 0);
-  --foreground: oklch(0.12 0 0);
+  --radius: 0.5rem;
+  --dot: oklch(0.2 0.03 262 / 0.07);
+  --background: oklch(0.984 0.003 250);
+  --foreground: oklch(0.205 0.032 262);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.12 0 0);
+  --card-foreground: oklch(0.205 0.032 262);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.12 0 0);
-  --primary: oklch(0.12 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.965 0 0);
-  --secondary-foreground: oklch(0.38 0 0);
-  --muted: oklch(0.94 0 0);
-  --muted-foreground: oklch(0.58 0 0);
-  --accent: oklch(0.965 0 0);
-  --accent-foreground: oklch(0.12 0 0);
-  --destructive: oklch(0.55 0.15 25);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.9 0 0);
-  --ring: oklch(0.5 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.97 0 0);
-  --sidebar-foreground: oklch(0.38 0 0);
-  --sidebar-primary: oklch(0.12 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.12 0 0 / 0.06);
-  --sidebar-accent-foreground: oklch(0.12 0 0);
-  --sidebar-border: oklch(0.88 0 0);
-  --sidebar-ring: oklch(0.5 0 0);
+  --popover-foreground: oklch(0.205 0.032 262);
+  --primary: oklch(0.205 0.032 262);
+  --primary-foreground: oklch(0.984 0.003 250);
+  --secondary: oklch(0.945 0.014 278);
+  --secondary-foreground: oklch(0.3 0.03 262);
+  --muted: oklch(0.945 0.014 278);
+  --muted-foreground: oklch(0.52 0.022 262);
+  --accent: oklch(0.9 0.028 280);
+  --accent-foreground: oklch(0.205 0.032 262);
+  --destructive: oklch(0.55 0.16 25);
+  --border: oklch(0.905 0.008 262);
+  --input: oklch(0.905 0.008 262);
+  --ring: oklch(0.205 0.032 262);
+  --chart-1: oklch(0.55 0.16 262);
+  --chart-2: oklch(0.6 0.12 200);
+  --chart-3: oklch(0.5 0.1 280);
+  --chart-4: oklch(0.75 0.12 84);
+  --chart-5: oklch(0.62 0.14 30);
+  --sidebar: oklch(0.968 0.006 260);
+  --sidebar-foreground: oklch(0.3 0.03 262);
+  --sidebar-primary: oklch(0.205 0.032 262);
+  --sidebar-primary-foreground: oklch(0.984 0.003 250);
+  --sidebar-accent: oklch(0.205 0.032 262 / 0.06);
+  --sidebar-accent-foreground: oklch(0.205 0.032 262);
+  --sidebar-border: oklch(0.9 0.008 262);
+  --sidebar-ring: oklch(0.205 0.032 262);
 
   --shadow-card: 0 1px 3px oklch(0 0 0 / 0.05), 0 1px 1px oklch(0 0 0 / 0.03);
   --shadow-float:
@@ -95,37 +104,38 @@
 }
 
 .dark {
-  --background: oklch(0.195 0 0);
-  --foreground: oklch(0.94 0 0);
-  --card: oklch(0.225 0 0);
-  --card-foreground: oklch(0.94 0 0);
-  --popover: oklch(0.225 0 0);
-  --popover-foreground: oklch(0.94 0 0);
-  --primary: oklch(0.94 0 0);
-  --primary-foreground: oklch(0.195 0 0);
-  --secondary: oklch(0.26 0 0);
-  --secondary-foreground: oklch(0.75 0 0);
-  --muted: oklch(0.165 0 0);
-  --muted-foreground: oklch(0.6 0 0);
-  --accent: oklch(0.26 0 0);
-  --accent-foreground: oklch(0.94 0 0);
+  --dot: oklch(0.95 0.02 275 / 0.06);
+  --background: oklch(0.17 0.02 258);
+  --foreground: oklch(0.93 0.012 275);
+  --card: oklch(0.205 0.022 258);
+  --card-foreground: oklch(0.93 0.012 275);
+  --popover: oklch(0.205 0.022 258);
+  --popover-foreground: oklch(0.93 0.012 275);
+  --primary: oklch(0.93 0.012 275);
+  --primary-foreground: oklch(0.17 0.02 258);
+  --secondary: oklch(0.24 0.022 258);
+  --secondary-foreground: oklch(0.8 0.015 275);
+  --muted: oklch(0.22 0.022 258);
+  --muted-foreground: oklch(0.66 0.018 270);
+  --accent: oklch(0.28 0.03 275);
+  --accent-foreground: oklch(0.93 0.012 275);
   --destructive: oklch(0.7 0.15 25);
-  --border: oklch(0.27 0 0);
-  --input: oklch(0.27 0 0);
-  --ring: oklch(0.45 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.175 0 0);
-  --sidebar-foreground: oklch(0.78 0 0);
-  --sidebar-primary: oklch(0.94 0 0);
-  --sidebar-primary-foreground: oklch(0.195 0 0);
-  --sidebar-accent: oklch(0.94 0 0 / 0.06);
-  --sidebar-accent-foreground: oklch(0.94 0 0);
-  --sidebar-border: oklch(0.25 0 0);
-  --sidebar-ring: oklch(0.45 0 0);
+  --border: oklch(0.27 0.022 258);
+  --input: oklch(0.27 0.022 258);
+  --ring: oklch(0.5 0.03 262);
+  --chart-1: oklch(0.62 0.17 264);
+  --chart-2: oklch(0.7 0.14 200);
+  --chart-3: oklch(0.77 0.15 84);
+  --chart-4: oklch(0.64 0.2 304);
+  --chart-5: oklch(0.66 0.2 20);
+  --sidebar: oklch(0.155 0.018 258);
+  --sidebar-foreground: oklch(0.8 0.015 275);
+  --sidebar-primary: oklch(0.93 0.012 275);
+  --sidebar-primary-foreground: oklch(0.17 0.02 258);
+  --sidebar-accent: oklch(0.93 0.012 275 / 0.06);
+  --sidebar-accent-foreground: oklch(0.93 0.012 275);
+  --sidebar-border: oklch(0.25 0.02 258);
+  --sidebar-ring: oklch(0.5 0.03 262);
 
   --shadow-card:
     inset 0 1px 0 oklch(1 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.2),
@@ -148,8 +158,11 @@
     font-feature-settings: "ss01", "ss02", "cv01";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    background-position: -1px -1px;
+    background-size: 22px 22px;
     text-rendering: optimizeLegibility;
-    @apply bg-background text-foreground;
+    @apply bg-background font-sans text-foreground;
   }
 }
 
@@ -179,8 +192,10 @@
   h4,
   h5,
   h6 {
-    line-height: 1.2;
-    letter-spacing: -0.025em;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
   }
 
   p {

@@ -1,5 +1,6 @@
 "use client";
 import type { UseChatHelpers } from "@ai-sdk/react";
+import { CreditCard } from "lucide-react";
 import { useCallback } from "react";
 import type { Vote } from "@/lib/db/schema";
 import type { ChatMessage } from "@/lib/types";
@@ -16,7 +17,6 @@ import {
 import { useDataStream } from "./data-stream-provider";
 import { DocumentToolResult } from "./document";
 import { DocumentPreview } from "./document-preview";
-import { SparklesIcon } from "./icons";
 import { MessageActions } from "./message-actions";
 import { MessageReasoning } from "./message-reasoning";
 import { PreviewAttachment } from "./preview-attachment";
@@ -155,7 +155,25 @@ const PurePreviewMessage = ({
     { isStreaming: false, rendered: false, text: "" }
   ) ?? { isStreaming: false, rendered: false, text: "" };
 
-  const parts = message.parts?.map((part, index) => {
+  // Drop any preamble text that the model emits before its first tool call, so
+  // answers stay concise (e.g. "I'll look up your benefits..." disappears).
+  const visibleParts = (() => {
+    const allParts = message.parts ?? [];
+    if (message.role !== "assistant") {
+      return allParts;
+    }
+    const firstToolIndex = allParts.findIndex((part) =>
+      part.type.startsWith("tool-")
+    );
+    if (firstToolIndex <= 0) {
+      return allParts;
+    }
+    return allParts.filter(
+      (part, index) => !(index < firstToolIndex && part.type === "text")
+    );
+  })();
+
+  const parts = visibleParts.map((part, index) => {
     const { type } = part;
     const key = `message-${message.id}-part-${index}`;
 
@@ -379,7 +397,7 @@ const PurePreviewMessage = ({
         {isAssistant && (
           <div className="flex h-[calc(13px*1.65)] shrink-0 items-center">
             <div className="flex size-7 items-center justify-center rounded-lg bg-muted/60 text-muted-foreground ring-1 ring-border/50">
-              <SparklesIcon size={13} />
+              <CreditCard className="size-3.5" />
             </div>
           </div>
         )}
@@ -404,7 +422,7 @@ export const ThinkingMessage = () => (
     <div className="flex items-start gap-3">
       <div className="flex h-[calc(13px*1.65)] shrink-0 items-center">
         <div className="flex size-7 items-center justify-center rounded-lg bg-muted/60 text-muted-foreground ring-1 ring-border/50">
-          <SparklesIcon size={13} />
+          <CreditCard className="size-3.5" />
         </div>
       </div>
 

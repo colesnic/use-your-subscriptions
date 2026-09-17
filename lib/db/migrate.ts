@@ -1,22 +1,22 @@
+import { createClient } from "@libsql/client";
 import { config } from "dotenv";
-import { drizzle } from "drizzle-orm/postgres-js";
-import { migrate } from "drizzle-orm/postgres-js/migrator";
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/libsql";
+import { migrate } from "drizzle-orm/libsql/migrator";
 
 config({
   path: ".env.local",
 });
 
 const runMigrate = async () => {
-  if (!process.env.POSTGRES_URL) {
-    console.log("POSTGRES_URL not defined, skipping migrations");
-    process.exit(0);
-  }
+  const url = process.env.DATABASE_URL ?? "file:./local.db";
 
-  const connection = postgres(process.env.POSTGRES_URL, { max: 1 });
-  const db = drizzle(connection);
+  const client = createClient({
+    authToken: process.env.DATABASE_AUTH_TOKEN,
+    url,
+  });
+  const db = drizzle(client);
 
-  console.log("Running migrations...");
+  console.log(`Running migrations against ${url}...`);
 
   const start = Date.now();
   await migrate(db, { migrationsFolder: "./lib/db/migrations" });
