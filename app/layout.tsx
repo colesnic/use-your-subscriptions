@@ -6,9 +6,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  description: "Next.js chatbot template using the AI SDK.",
-  metadataBase: new URL("https://chat.vercel.ai"),
-  title: "Next.js Chatbot Template",
+  description:
+    "Find out which of your cards and memberships apply to what you are doing.",
+  metadataBase: new URL("https://chatbot.membershipmaxxing.workers.dev"),
+  title: "Use Your Subscriptions",
 };
 
 export const viewport: Viewport = {
