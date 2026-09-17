@@ -158,6 +158,7 @@ export const provider = sqliteTable("Provider", {
   description: text("description"),
   id: text("id").primaryKey().notNull().$defaultFn(uuid),
   issuer: text("issuer"),
+  lastCheckedAt: integer("lastCheckedAt", { mode: "timestamp" }),
   lastVerifiedAt: integer("lastVerifiedAt", { mode: "timestamp" }),
   logo: text("logo"),
   name: text("name").notNull(),
@@ -291,3 +292,30 @@ export const providerRelation = sqliteTable(
 );
 
 export type ProviderRelation = InferSelectModel<typeof providerRelation>;
+
+/**
+ * Reviewable benefit updates proposed by the weekly sync Worker. Nothing is
+ * applied automatically; a human reviews and applies them.
+ */
+export const benefitProposal = sqliteTable("BenefitProposal", {
+  added: integer("added").notNull().default(0),
+  changed: integer("changed").notNull().default(0),
+  createdAt: integer("createdAt", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  fetchedAt: integer("fetchedAt", { mode: "timestamp" }).notNull(),
+  id: text("id").primaryKey().notNull().$defaultFn(uuid),
+  missing: integer("missing").notNull().default(0),
+  payload: text("payload", { mode: "json" }).notNull(),
+  providerId: text("providerId")
+    .notNull()
+    .references(() => provider.id),
+  providerName: text("providerName").notNull(),
+  providerSlug: text("providerSlug").notNull(),
+  sourceUrl: text("sourceUrl"),
+  status: text("status", { enum: ["needs-review", "applied", "rejected"] })
+    .notNull()
+    .default("needs-review"),
+});
+
+export type BenefitProposal = InferSelectModel<typeof benefitProposal>;

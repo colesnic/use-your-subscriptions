@@ -1,0 +1,17 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "benefits-sync",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "triggers": {
+    "crons": ["0 13 * * SUN"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "chatbot-db",
+      "database_id": "044a4885-5871-4ee4-af32-790c3e0eb6c0"
+    }
+  ]
+}
