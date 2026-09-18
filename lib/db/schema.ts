@@ -5,6 +5,7 @@ import {
   primaryKey,
   sqliteTable,
   text,
+  uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 
 const uuid = () => crypto.randomUUID();
@@ -45,6 +46,32 @@ export const session = sqliteTable("Session", {
 });
 
 export type Session = InferSelectModel<typeof session>;
+
+/**
+ * Links a user to an external identity provider (for example Google).
+ */
+export const account = sqliteTable(
+  "Account",
+  {
+    createdAt: integer("createdAt", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    id: text("id").primaryKey().notNull().$defaultFn(uuid),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => user.id),
+  },
+  (table) => [
+    uniqueIndex("Account_provider_account_idx").on(
+      table.provider,
+      table.providerAccountId
+    ),
+  ]
+);
+
+export type Account = InferSelectModel<typeof account>;
 
 export const verificationToken = sqliteTable("VerificationToken", {
   createdAt: integer("createdAt", { mode: "timestamp" })

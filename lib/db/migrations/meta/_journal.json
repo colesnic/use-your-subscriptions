@@ -50,6 +50,13 @@
       "when": 1789747271972,
       "tag": "0006_outstanding_rick_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1789747705730,
+      "tag": "0007_sturdy_monster_badoon",
+      "breakpoints": true
     }
   ]
 }

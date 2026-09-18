@@ -12,6 +12,7 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/dashboard";
+  const googleError = searchParams.get("error");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -109,6 +110,27 @@ export function LoginForm() {
               : "Create account"}
         </Button>
       </form>
+
+      <div className="flex items-center gap-3 text-muted-foreground text-xs">
+        <span className="h-px flex-1 bg-border" />
+        or
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <a
+        className="flex h-9 items-center justify-center rounded-lg border border-border/60 text-sm transition-colors hover:bg-muted/50"
+        href="/api/auth/google"
+      >
+        Continue with Google
+      </a>
+
+      {googleError ? (
+        <p className="text-center text-destructive text-xs" role="alert">
+          {googleError === "google_unconfigured"
+            ? "Google sign-in isn't configured yet."
+            : "We couldn't sign you in with Google. Please try again."}
+        </p>
+      ) : null}
 
       <div className="flex items-center justify-between gap-2">
         <button
