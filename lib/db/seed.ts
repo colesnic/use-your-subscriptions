@@ -2403,6 +2403,1533 @@ const providers: SeedProvider[] = [
     section: "everyday",
     slug: "zoo-membership",
   },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5% cash back on up to $1,500 in combined purchases in rotating quarterly categories you activate, 5% on travel purchased through Chase Travel, 3% on dining and drugstore purchases, and 1% on everything else.",
+        summary:
+          "5% rotating quarterly categories (activate, $1,500 cap), 5% Chase Travel, 3% dining and drugstores, 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "5% rotating",
+          "3% dining",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "5% rotating categories",
+      },
+      {
+        category: "shopping",
+        details:
+          "Includes purchase protection against damage or theft for 120 days, extended warranty coverage, and trip cancellation and interruption insurance on eligible purchases.",
+        summary:
+          "Purchase protection, extended warranty, and trip cancellation coverage.",
+        tags: [
+          "purchase protection",
+          "warranty",
+          "trip cancellation",
+          "shopping",
+        ],
+        title: "Purchase and travel protections",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee cash back card with 5% rotating quarterly categories plus Chase Travel and dining bonuses.",
+    issuer: "Chase",
+    name: "Chase Freedom Flex",
+    section: "credit_card",
+    slug: "chase-freedom-flex",
+    website:
+      "https://creditcards.chase.com/cash-back-credit-cards/freedom/flex",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5% cash back at office supply stores and on internet, cable, and phone services (up to $25,000 combined each year), 2% at gas stations and restaurants (up to $25,000 combined each year), and 1% on all other purchases.",
+        summary:
+          "5% office supplies and internet/cable/phone (up to $25k/yr), 2% gas and dining (up to $25k/yr), 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "5% office supplies",
+          "2% gas",
+          "business",
+        ],
+        title: "Earning rates",
+        value: "5% office supplies",
+      },
+      {
+        category: "shopping",
+        details:
+          "Includes purchase protection and extended warranty coverage on eligible business purchases.",
+        summary: "Purchase protection and extended warranty on eligible items.",
+        tags: ["purchase protection", "warranty", "business", "shopping"],
+        title: "Purchase protections",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee business cash back card with 5% office supply and phone/internet categories.",
+    issuer: "Chase",
+    name: "Chase Ink Business Cash",
+    section: "credit_card",
+    slug: "chase-ink-business-cash",
+    website: "https://creditcards.chase.com/business-credit-cards/ink/cash",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3x points on travel, shipping purchases, internet, cable and phone services, and advertising purchases with social media and search engines (up to $150,000 combined each account anniversary year), and 1x on everything else.",
+        summary:
+          "3x travel, shipping, internet/cable/phone, and advertising (up to $150k/yr), 1x other.",
+        tags: ["points", "earning", "3x travel", "3x advertising", "business"],
+        title: "Earning rates",
+        value: "3x bonus categories",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes trip cancellation and interruption insurance, primary rental car coverage when renting for business, and cell phone protection when you pay your monthly bill with the card.",
+        summary:
+          "Trip cancellation, primary rental car coverage, and cell phone protection.",
+        tags: [
+          "trip cancellation",
+          "rental car",
+          "cell phone protection",
+          "business",
+        ],
+        title: "Travel and phone protections",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Business travel and advertising card with 3x on travel, shipping, phone, and ads, plus strong protections.",
+    issuer: "Chase",
+    name: "Chase Ink Business Preferred",
+    section: "credit_card",
+    slug: "chase-ink-business-preferred",
+    website:
+      "https://creditcards.chase.com/business-credit-cards/ink/preferred",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn an unlimited 1.5% cash back on every purchase, with no categories to track and no annual fee.",
+        summary: "Unlimited 1.5% cash back on all purchases.",
+        tags: ["cash back", "earning", "1.5%", "flat rate", "business"],
+        title: "Earning rates",
+        value: "1.5% back",
+      },
+      {
+        category: "shopping",
+        details:
+          "Includes purchase protection and extended warranty coverage on eligible business purchases.",
+        summary: "Purchase protection and extended warranty on eligible items.",
+        tags: ["purchase protection", "warranty", "business", "shopping"],
+        title: "Purchase protections",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee business card earning a flat 1.5% back on every purchase.",
+    issuer: "Chase",
+    name: "Chase Ink Business Unlimited",
+    section: "credit_card",
+    slug: "chase-ink-business-unlimited",
+    website:
+      "https://creditcards.chase.com/business-credit-cards/ink/unlimited",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "With an eligible Prime membership, earn 5% back at Amazon.com and Whole Foods Market, 2% back at restaurants, gas stations, and drugstores, and 1% back on all other purchases. Without Prime, Amazon and Whole Foods earn 3%.",
+        summary:
+          "5% Amazon and Whole Foods with Prime, 2% restaurants/gas/drugstores, 1% other.",
+        tags: [
+          "amazon",
+          "prime",
+          "cash back",
+          "5% amazon",
+          "whole foods",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "5% at Amazon with Prime",
+      },
+      {
+        category: "shopping",
+        details:
+          "No foreign transaction fees and includes purchase protection and extended warranty coverage on eligible items.",
+        summary:
+          "No foreign transaction fees plus purchase protection and extended warranty.",
+        tags: [
+          "no foreign transaction fees",
+          "purchase protection",
+          "warranty",
+        ],
+        title: "Shopping protections",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Amazon's Prime rewards card with 5% back at Amazon and Whole Foods and no annual fee.",
+    issuer: "Chase",
+    name: "Amazon Prime Rewards Visa Signature Card",
+    section: "credit_card",
+    slug: "amazon-prime-rewards-visa",
+    website: "https://www.amazon.com/Prime-Rewards-Visa-Card",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% back at Amazon.com and Whole Foods Market, 2% back at restaurants, gas stations, and drugstores, and 1% back on all other purchases, with no annual fee.",
+        summary:
+          "3% Amazon and Whole Foods, 2% restaurants/gas/drugstores, 1% other.",
+        tags: [
+          "amazon",
+          "cash back",
+          "3% amazon",
+          "whole foods",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "3% at Amazon",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee Amazon rewards card with 3% back at Amazon and Whole Foods.",
+    issuer: "Chase",
+    name: "Amazon Rewards Visa Signature Card",
+    section: "credit_card",
+    slug: "amazon-rewards-visa",
+    website: "https://www.amazon.com/gp/cobrandcard",
+  },
+  {
+    annualFee: 14_900,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3x points on Southwest Airlines purchases, 2x points on Rapid Rewards hotel and car rental partner purchases, and 1x points on all other purchases.",
+        summary:
+          "3x Southwest, 2x Rapid Rewards hotel and car partners, 1x other.",
+        tags: ["points", "earning", "southwest", "3x", "airline"],
+        title: "Earning rates",
+        value: "3x Southwest",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes 7,500 bonus points each account anniversary, a $75 annual Southwest travel credit, and four upgraded boardings per year when available.",
+        summary:
+          "7,500 anniversary points, a $75 Southwest credit, and four upgraded boardings.",
+        tags: [
+          "southwest",
+          "anniversary points",
+          "travel credit",
+          "upgraded boarding",
+        ],
+        title: "Anniversary points and travel credit",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Southwest Airlines card with anniversary points, an annual travel credit, and upgraded boardings.",
+    issuer: "Chase",
+    name: "Southwest Rapid Rewards Priority Card",
+    section: "credit_card",
+    slug: "southwest-rapid-rewards-priority",
+    website:
+      "https://creditcards.chase.com/travel-credit-cards/southwest/priority",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 2x miles on United purchases, dining (including eligible delivery services), and hotel stays, and 1x miles on all other purchases.",
+        summary: "2x United, dining, and hotels; 1x other.",
+        tags: ["miles", "earning", "united", "2x dining", "airline"],
+        title: "Earning rates",
+        value: "2x United",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes a free checked bag for you and one companion on United flights, priority boarding, two United Club one-time passes each year, and a Global Entry, TSA PreCheck, or NEXUS application fee credit.",
+        summary:
+          "Free checked bag, priority boarding, two United Club passes, and a Global Entry/TSA credit.",
+        tags: [
+          "united",
+          "checked bag",
+          "priority boarding",
+          "united club",
+          "global entry",
+        ],
+        title: "Airline perks",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "United Airlines card with a free checked bag, priority boarding, and United Club passes.",
+    issuer: "Chase",
+    name: "United Explorer Card",
+    section: "credit_card",
+    slug: "united-explorer-card",
+    website:
+      "https://creditcards.chase.com/travel-credit-cards/united/explorer",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "travel",
+        details:
+          "Includes a free night award each account anniversary valid at Category 1-4 World of Hyatt hotels, and 5 tier-qualifying night credits each year plus 2 more for every $5,000 spent on the card.",
+        summary:
+          "Annual Category 1-4 free night plus tier-qualifying night credits toward status.",
+        tags: ["hyatt", "free night", "hotel", "elite nights", "status"],
+        title: "Annual free night and elite nights",
+        value: "1 free night/year",
+      },
+      {
+        category: "rewards",
+        details:
+          "Earn 4x points at Hyatt hotels, 2x points on restaurants, airline tickets purchased directly with the airline, local transit, and fitness clubs, and 1x on all other purchases.",
+        summary:
+          "4x Hyatt, 2x dining, airfare, transit, and fitness; 1x other.",
+        tags: ["points", "earning", "4x hyatt", "2x dining", "hotel"],
+        title: "Earning rates",
+        value: "4x Hyatt",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "World of Hyatt card with an annual free night and fast track toward elite status.",
+    issuer: "Chase",
+    name: "World of Hyatt Credit Card",
+    section: "credit_card",
+    slug: "world-of-hyatt-credit-card",
+    website:
+      "https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "travel",
+        details:
+          "Includes a free night award each account anniversary valid at hotels up to 35,000 points, 15 elite night credits toward Marriott Bonvoy status each year, and complimentary Silver Elite status.",
+        summary:
+          "Annual free night (up to 35k points), 15 elite night credits, and Silver Elite status.",
+        tags: [
+          "marriott",
+          "free night",
+          "hotel",
+          "elite nights",
+          "silver elite",
+        ],
+        title: "Annual free night and elite nights",
+        value: "1 free night/year",
+      },
+      {
+        category: "rewards",
+        details:
+          "Earn 6x points at Marriott hotels, 3x points at gas stations, grocery stores, and on dining, and 2x points on all other purchases.",
+        summary: "6x Marriott, 3x gas/grocery/dining, 2x other.",
+        tags: ["points", "earning", "6x marriott", "3x dining", "hotel"],
+        title: "Earning rates",
+        value: "6x Marriott",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Marriott Bonvoy card with an annual free night and 15 elite night credits.",
+    issuer: "Chase",
+    name: "Marriott Bonvoy Boundless Credit Card",
+    section: "credit_card",
+    slug: "marriott-bonvoy-boundless",
+    website:
+      "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy/boundless",
+  },
+  {
+    annualFee: 9900,
+    benefits: [
+      {
+        category: "travel",
+        details:
+          "Includes a free night award each account anniversary, a fourth night free on award stays, and complimentary IHG One Rewards Platinum Elite status with room upgrades and bonus points.",
+        summary:
+          "Annual free night, fourth night free on awards, and Platinum Elite status.",
+        tags: [
+          "ihg",
+          "free night",
+          "hotel",
+          "fourth night free",
+          "platinum elite",
+        ],
+        title: "Annual free night and elite status",
+        value: "1 free night/year",
+      },
+      {
+        category: "rewards",
+        details:
+          "Earn 10x points at IHG hotels, 5x points on travel, dining, and gas stations, and 3x points on all other purchases.",
+        summary: "10x IHG, 5x travel/dining/gas, 3x other.",
+        tags: ["points", "earning", "10x ihg", "5x dining", "hotel"],
+        title: "Earning rates",
+        value: "10x IHG",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "IHG One Rewards card with an annual free night, fourth-night-free awards, and Platinum Elite status.",
+    issuer: "Chase",
+    name: "IHG One Rewards Premier Credit Card",
+    section: "credit_card",
+    slug: "ihg-one-rewards-premier",
+    website: "https://creditcards.chase.com/travel-credit-cards/ihg/premier",
+  },
+  {
+    annualFee: 9900,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 2x miles on eligible American Airlines purchases, at restaurants, and at gas stations, and 1x miles on all other purchases.",
+        summary: "2x American Airlines, dining, and gas; 1x other.",
+        tags: ["miles", "earning", "american airlines", "2x dining", "airline"],
+        title: "Earning rates",
+        value: "2x American Airlines",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes a free checked bag on domestic American Airlines flights, preferred boarding, and a $125 American Airlines flight discount after you spend $20,000 in a cardmember year.",
+        summary:
+          "Free checked bag, preferred boarding, and a $125 flight discount after $20k spend.",
+        tags: [
+          "american airlines",
+          "checked bag",
+          "preferred boarding",
+          "flight discount",
+        ],
+        title: "Airline perks",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "American Airlines card with a free checked bag, preferred boarding, and a flight discount.",
+    issuer: "Citi",
+    name: "Citi / AAdvantage Platinum Select World Elite Mastercard",
+    section: "credit_card",
+    slug: "citi-aadvantage-platinum-select",
+    website:
+      "https://www.citi.com/credit-cards/citi-aadvantage-platinum-select-world-elite-mastercard",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 6% cash back at U.S. supermarkets on up to $6,000 per year in purchases (then 1%), 6% on select U.S. streaming subscriptions, 3% on transit and at U.S. gas stations, and 1% on all other purchases.",
+        summary:
+          "6% U.S. supermarkets (up to $6k/yr), 6% streaming, 3% transit and gas, 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "6% groceries",
+          "6% streaming",
+          "3% gas",
+        ],
+        title: "Earning rates",
+        value: "6% groceries",
+      },
+      {
+        category: "shopping",
+        details:
+          "Includes return protection, purchase protection against damage or theft, and extended warranty coverage on eligible purchases.",
+        summary:
+          "Return protection, purchase protection, and extended warranty.",
+        tags: ["return protection", "purchase protection", "warranty"],
+        title: "Purchase protections",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Amex cash back card with 6% at U.S. supermarkets and on select streaming, plus 3% on gas and transit.",
+    issuer: "American Express",
+    name: "Blue Cash Preferred Card",
+    section: "credit_card",
+    slug: "amex-blue-cash-preferred",
+    website:
+      "https://www.americanexpress.com/us/credit-cards/card/blue-cash-preferred/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% cash back at U.S. supermarkets on up to $6,000 per year (then 1%), 3% on U.S. online retail purchases on up to $6,000 per year (then 1%), 3% at U.S. gas stations on up to $6,000 per year (then 1%), and 1% on all other purchases.",
+        summary:
+          "3% U.S. supermarkets, online retail, and gas (each up to $6k/yr), 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "3% groceries",
+          "3% online retail",
+          "3% gas",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "3% groceries",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee Amex cash back card with 3% at U.S. supermarkets, online retail, and gas stations.",
+    issuer: "American Express",
+    name: "Blue Cash Everyday Card",
+    section: "credit_card",
+    slug: "amex-blue-cash-everyday",
+    website:
+      "https://www.americanexpress.com/us/credit-cards/card/blue-cash-everyday/",
+  },
+  {
+    annualFee: 15_000,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3x points on travel, including airfare, hotels, transit, rideshare, and more, 3x points at restaurants, and 1x points on all other purchases.",
+        summary: "3x on travel and dining, 1x on everything else.",
+        tags: ["points", "earning", "3x travel", "3x dining", "amex"],
+        title: "Earning rates",
+        value: "3x travel and dining",
+      },
+      {
+        category: "security",
+        details:
+          "Includes up to $100 in annual statement credits toward a CLEAR Plus membership and up to $100 in annual LoungeBuddy credits for airport lounge access.",
+        summary:
+          "Up to $100 for CLEAR Plus and up to $100 in LoungeBuddy credits each year.",
+        tags: ["clear", "loungebuddy", "credit", "airport", "travel"],
+        title: "CLEAR and LoungeBuddy credits",
+        value: "Up to $200/year",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Amex travel and dining card with 3x on both and CLEAR Plus and LoungeBuddy credits.",
+    issuer: "American Express",
+    name: "American Express Green Card",
+    section: "credit_card",
+    slug: "amex-green",
+    website: "https://www.americanexpress.com/us/credit-cards/card/green/",
+  },
+  {
+    annualFee: 55_000,
+    benefits: [
+      {
+        category: "travel",
+        details:
+          "Includes complimentary Hilton Honors Diamond status with lounge access where available, room upgrades, and bonus points, plus an annual free night award at eligible properties.",
+        summary:
+          "Complimentary Hilton Honors Diamond status and an annual free night award.",
+        tags: [
+          "hilton",
+          "hotel",
+          "diamond status",
+          "free night",
+          "lounge",
+          "upgrade",
+        ],
+        title: "Diamond status and free night",
+        value: "1 free night/year",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes up to $200 in semiannual Hilton resort statement credits, up to $200 in airline fee credits each year, up to $100 in on-property credits on eligible stays, and Priority Pass Select lounge access.",
+        summary:
+          "Hilton resort credits, airline fee credits, on-property credits, and Priority Pass access.",
+        tags: [
+          "hilton",
+          "resort credit",
+          "airline credit",
+          "priority pass",
+          "lounge",
+        ],
+        title: "Statement credits and lounge access",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Hilton's premium card with Diamond status, an annual free night, and resort and airline credits.",
+    issuer: "American Express",
+    name: "Hilton Honors Aspire Card",
+    section: "credit_card",
+    slug: "hilton-honors-aspire",
+    website:
+      "https://www.americanexpress.com/us/credit-cards/card/hilton-honors-aspire/",
+  },
+  {
+    annualFee: 65_000,
+    benefits: [
+      {
+        category: "travel",
+        details:
+          "Includes complimentary Marriott Bonvoy Platinum Elite status with breakfast or lounge access options, room upgrades, and 4pm late checkout, plus an annual free night award worth up to 85,000 points.",
+        summary:
+          "Complimentary Platinum Elite status and an annual free night up to 85,000 points.",
+        tags: [
+          "marriott",
+          "hotel",
+          "platinum elite",
+          "free night",
+          "breakfast",
+        ],
+        title: "Platinum status and free night",
+        value: "1 free night/year",
+      },
+      {
+        category: "dining",
+        details:
+          "Includes up to $300 in annual dining statement credits (up to $25 per month at eligible restaurants worldwide) and Priority Pass Select lounge access.",
+        summary:
+          "Up to $300 in annual dining credits and Priority Pass Select access.",
+        tags: ["marriott", "dining credit", "priority pass", "lounge", "hotel"],
+        title: "Dining credits and lounge access",
+        value: "Up to $300/year",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Marriott's premium card with Platinum Elite status, an annual free night, and dining credits.",
+    issuer: "American Express",
+    name: "Marriott Bonvoy Brilliant American Express Card",
+    section: "credit_card",
+    slug: "marriott-bonvoy-brilliant",
+    website:
+      "https://www.americanexpress.com/us/credit-cards/card/marriott-bonvoy-brilliant/",
+  },
+  {
+    annualFee: 15_000,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 2x miles on Delta purchases, at restaurants, and at U.S. supermarkets, and 1x miles on all other purchases.",
+        summary: "2x Delta, dining, and U.S. supermarkets; 1x other.",
+        tags: ["miles", "earning", "delta", "2x dining", "airline"],
+        title: "Earning rates",
+        value: "2x Delta",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes a free checked bag on Delta flights, priority boarding, and a $100 Delta flight credit after you spend $10,000 in a calendar year.",
+        summary:
+          "Free checked bag, priority boarding, and a $100 flight credit after $10k spend.",
+        tags: ["delta", "checked bag", "priority boarding", "flight credit"],
+        title: "Airline perks",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Delta card with a free checked bag, priority boarding, and a flight credit after qualifying spend.",
+    issuer: "American Express",
+    name: "Delta SkyMiles Gold American Express Card",
+    section: "credit_card",
+    slug: "delta-skymiles-gold",
+    website:
+      "https://www.americanexpress.com/us/credit-cards/card/delta-skymiles-gold-american-express-card/",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn an unlimited 2x miles on every purchase, plus 5x miles on hotels and rental cars booked through Capital One Travel.",
+        summary:
+          "2x miles on everything, 5x on hotels and rental cars via Capital One Travel.",
+        tags: ["miles", "earning", "2x", "5x travel", "flat rate"],
+        title: "Earning rates",
+        value: "2x everywhere",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes a credit of up to $100 for Global Entry or TSA PreCheck application fees, and miles can be transferred to partner airline and hotel programs.",
+        summary:
+          "Up to $100 Global Entry or TSA PreCheck credit and transferable miles.",
+        tags: ["global entry", "tsa precheck", "transfer partners", "travel"],
+        title: "Trusted traveler credit",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Capital One's flat-rate travel card earning 2x miles on everything, with transfer partners.",
+    issuer: "Capital One",
+    name: "Capital One Venture Rewards Credit Card",
+    section: "credit_card",
+    slug: "capital-one-venture",
+    website: "https://www.capitalone.com/credit-cards/venture/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% cash back on dining, grocery stores, entertainment, and popular streaming services, and 1% cash back on all other purchases, with no annual fee.",
+        summary: "3% dining, grocery, entertainment, and streaming; 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "3% dining",
+          "3% grocery",
+          "3% streaming",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "3% dining",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee cash back card with 3% on dining, groceries, entertainment, and streaming.",
+    issuer: "Capital One",
+    name: "Capital One SavorOne Cash Rewards Credit Card",
+    section: "credit_card",
+    slug: "capital-one-savorone",
+    website: "https://www.capitalone.com/credit-cards/savorone-cash-rewards/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn an unlimited 1.5% cash back on every purchase, plus 5% on hotels and rental cars booked through Capital One Travel, with no annual fee.",
+        summary:
+          "1.5% cash back on everything and 5% on Capital One Travel hotels and cars.",
+        tags: ["cash back", "earning", "1.5%", "flat rate", "no annual fee"],
+        title: "Earning rates",
+        value: "1.5% everywhere",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee flat-rate cash back card with 1.5% on all purchases.",
+    issuer: "Capital One",
+    name: "Capital One Quicksilver Cash Rewards Credit Card",
+    section: "credit_card",
+    slug: "capital-one-quicksilver",
+    website: "https://www.capitalone.com/credit-cards/quicksilver/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5% cash back on purchases in your top eligible spend category each billing cycle (up to $500 spent, then 1%), and 1% cash back on all other purchases. Eligible categories include restaurants, gas stations, grocery stores, select travel, select transit, select streaming, drugstores, home improvement, fitness clubs, and live entertainment.",
+        summary:
+          "5% on your top eligible category each billing cycle (up to $500), 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "5% top category",
+          "no annual fee",
+          "flexible",
+        ],
+        title: "Earning rates",
+        value: "5% top category",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee card that earns 5% back on whichever eligible category you spend the most in each cycle.",
+    issuer: "Citi",
+    name: "Citi Custom Cash Card",
+    section: "credit_card",
+    slug: "citi-custom-cash",
+    website: "https://www.citi.com/credit-cards/citi-custom-cash-credit-card",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 10x points on hotels, car rentals, and attractions booked through Citi Travel, 3x points on air travel and other hotel purchases, restaurants, supermarkets, gas stations, and EV charging, and 1x points on all other purchases.",
+        summary:
+          "10x Citi Travel hotels and car rentals, 3x air travel, dining, groceries, and gas, 1x other.",
+        tags: ["points", "earning", "10x hotels", "3x dining", "3x groceries"],
+        title: "Earning rates",
+        value: "10x Citi Travel",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes a $100 annual hotel benefit when you book a single stay of $500 or more through Citi Travel, and points transfer to participating airline and hotel partners.",
+        summary: "$100 annual hotel benefit and transferable ThankYou points.",
+        tags: ["hotel credit", "transfer partners", "travel", "points"],
+        title: "Annual hotel benefit",
+        value: "$100/year",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Citi's mid-tier travel card with 10x on Citi Travel and 3x on air travel, dining, groceries, and gas.",
+    issuer: "Citi",
+    name: "Citi Strata Premier Card",
+    section: "credit_card",
+    slug: "citi-strata-premier",
+    website:
+      "https://www.citi.com/credit-cards/citi-strata-premier-credit-card",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 2x ThankYou points at supermarkets and gas stations on up to $6,000 per year in purchases (then 1x), and 1x points on all other purchases. Your points round up to the nearest 10 on every purchase, and you get 10% of your points back on redemptions (up to 100,000 points per year).",
+        summary:
+          "2x supermarkets and gas (up to $6k/yr), 1x other, points rounded up, and 10% back on redemptions.",
+        tags: ["points", "earning", "2x groceries", "2x gas", "no annual fee"],
+        title: "Earning rates",
+        value: "2x groceries and gas",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee ThankYou points card with 2x at supermarkets and gas stations and a redemption bonus.",
+    issuer: "Citi",
+    name: "Citi Rewards+ Card",
+    section: "credit_card",
+    slug: "citi-rewards-plus",
+    website: "https://www.citi.com/credit-cards/citi-rewards-plus-credit-card",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5% cash back on up to $1,500 in combined purchases in rotating quarterly categories you activate, and 1% cash back on all other purchases. Discover automatically matches all the cash back you earn at the end of your first year, with no annual fee.",
+        summary:
+          "5% rotating quarterly categories (activate, $1,500 cap), 1% other, plus first-year Cashback Match.",
+        tags: [
+          "cash back",
+          "earning",
+          "5% rotating",
+          "cashback match",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "5% rotating categories",
+      },
+      {
+        category: "security",
+        details:
+          "Includes no foreign transaction fees, free access to your FICO credit score, and $0 fraud liability.",
+        summary:
+          "No foreign transaction fees, free FICO score, and $0 fraud liability.",
+        tags: ["no foreign transaction fees", "fico score", "fraud protection"],
+        title: "Account protections",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Discover's flagship cash back card with 5% rotating categories and first-year Cashback Match.",
+    issuer: "Discover",
+    name: "Discover it Cash Back",
+    section: "credit_card",
+    slug: "discover-it-cash-back",
+    website: "https://www.discover.com/credit-cards/cash-back/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn an unlimited 1.5x miles on every purchase with no annual fee. Discover matches all the miles you earn at the end of your first year, effectively doubling them.",
+        summary:
+          "1.5x miles on everything, plus a first-year match that doubles your miles.",
+        tags: [
+          "miles",
+          "earning",
+          "1.5x",
+          "flat rate",
+          "no annual fee",
+          "cashback match",
+        ],
+        title: "Earning rates",
+        value: "1.5x everywhere",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee travel card earning 1.5x miles on every purchase with a first-year match.",
+    issuer: "Discover",
+    name: "Discover it Miles",
+    section: "credit_card",
+    slug: "discover-it-miles",
+    website: "https://www.discover.com/credit-cards/travel/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5% cash back on up to $1,500 in combined purchases in rotating quarterly categories you activate, and 1% cash back on all other purchases, with first-year Cashback Match. Designed for students building credit.",
+        summary:
+          "5% rotating quarterly categories (activate, $1,500 cap), 1% other, and first-year Cashback Match.",
+        tags: [
+          "cash back",
+          "student",
+          "5% rotating",
+          "cashback match",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "5% rotating categories",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Student cash back card with 5% rotating categories and first-year Cashback Match.",
+    issuer: "Discover",
+    name: "Discover it Student Cash Back",
+    section: "credit_card",
+    slug: "discover-it-student-cash-back",
+    website: "https://www.discover.com/credit-cards/student/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn an unlimited 2% cash back on all purchases, with no categories to track, no annual fee, and no foreign transaction fees.",
+        summary: "Unlimited 2% cash back on every purchase.",
+        tags: ["cash back", "earning", "2%", "flat rate", "no annual fee"],
+        title: "Earning rates",
+        value: "2% everywhere",
+      },
+      {
+        category: "everyday",
+        details:
+          "Includes cell phone protection of up to $600 per claim ($25 deductible) when you pay your monthly cell phone bill with the card.",
+        summary:
+          "Cell phone protection when you pay your monthly bill with the card.",
+        tags: ["cell phone protection", "phone", "damage", "theft"],
+        title: "Cell phone protection",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee flat-rate cash back card with 2% on everything and cell phone protection.",
+    issuer: "Wells Fargo",
+    name: "Wells Fargo Active Cash Card",
+    section: "credit_card",
+    slug: "wells-fargo-active-cash",
+    website: "https://www.wellsfargo.com/credit-cards/active-cash/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3x points on restaurants, travel, gas stations, transit, popular streaming services, and phone plans, and 1x points on all other purchases, with no annual fee and no foreign transaction fees.",
+        summary:
+          "3x dining, travel, gas, transit, streaming, and phone plans; 1x other.",
+        tags: [
+          "points",
+          "earning",
+          "3x dining",
+          "3x travel",
+          "3x gas",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "3x bonus categories",
+      },
+      {
+        category: "everyday",
+        details:
+          "Includes cell phone protection of up to $600 per claim ($25 deductible) when you pay your monthly cell phone bill with the card.",
+        summary:
+          "Cell phone protection when you pay your monthly bill with the card.",
+        tags: ["cell phone protection", "phone", "damage", "theft"],
+        title: "Cell phone protection",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee card with 3x on dining, travel, gas, transit, streaming, and phone plans.",
+    issuer: "Wells Fargo",
+    name: "Wells Fargo Autograph Card",
+    section: "credit_card",
+    slug: "wells-fargo-autograph",
+    website: "https://www.wellsfargo.com/credit-cards/autograph/",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5x points on hotels, 4x points on airlines, 3x points on other travel and dining, and 1x points on all other purchases.",
+        summary:
+          "5x hotels, 4x airlines, 3x other travel and dining, 1x other.",
+        tags: ["points", "earning", "5x hotels", "4x airlines", "3x dining"],
+        title: "Earning rates",
+        value: "5x hotels",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes a $50 annual statement credit for airline purchases and no foreign transaction fees.",
+        summary: "$50 annual airline credit and no foreign transaction fees.",
+        tags: ["airline credit", "travel", "no foreign transaction fees"],
+        title: "Annual airline credit",
+        value: "$50/year",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Wells Fargo travel card with 5x hotels, 4x airlines, and a $50 annual airline credit.",
+    issuer: "Wells Fargo",
+    name: "Wells Fargo Autograph Journey Card",
+    section: "credit_card",
+    slug: "wells-fargo-autograph-journey",
+    website: "https://www.wellsfargo.com/credit-cards/autograph-journey/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% cash back in the category of your choice (gas and EV charging, online shopping, dining, travel, drugstores, or home improvement and furnishings) and 2% at grocery stores and wholesale clubs, on up to $2,500 in combined quarterly purchases (then 1%), and 1% on all other purchases. Preferred Rewards members can earn a 25% to 75% bonus on every purchase.",
+        summary:
+          "3% in a chosen category and 2% at groceries/wholesale clubs (up to $2,500/quarter combined), 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "3% chosen category",
+          "2% groceries",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "3% chosen category",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee card with 3% back in a category you choose and extra rewards for Preferred Rewards members.",
+    issuer: "Bank of America",
+    name: "Bank of America Customized Cash Rewards Card",
+    section: "credit_card",
+    slug: "bofa-customized-cash-rewards",
+    website:
+      "https://www.bankofamerica.com/credit-cards/products/cash-back-credit-card/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn an unlimited 1.5% cash back on all purchases, with no annual fee. Preferred Rewards members can earn a 25% to 75% bonus on every purchase, boosting the rate to as much as 2.62%.",
+        summary:
+          "Unlimited 1.5% cash back, with up to a 75% bonus for Preferred Rewards members.",
+        tags: ["cash back", "earning", "1.5%", "flat rate", "no annual fee"],
+        title: "Earning rates",
+        value: "1.5% everywhere",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee flat-rate cash back card with extra rewards for Preferred Rewards members.",
+    issuer: "Bank of America",
+    name: "Bank of America Unlimited Cash Rewards Card",
+    section: "credit_card",
+    slug: "bofa-unlimited-cash-rewards",
+    website:
+      "https://www.bankofamerica.com/credit-cards/products/unlimited-cash-back-credit-card/",
+  },
+  {
+    annualFee: 9500,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 2x points on travel and dining and 1.5x points on all other purchases. Preferred Rewards members can earn a 25% to 75% bonus on every purchase.",
+        summary:
+          "2x travel and dining, 1.5x other, with up to a 75% bonus for Preferred Rewards members.",
+        tags: ["points", "earning", "2x travel", "2x dining", "premium"],
+        title: "Earning rates",
+        value: "2x travel and dining",
+      },
+      {
+        category: "travel",
+        details:
+          "Includes up to $100 in airline incidental statement credits each year and a credit of up to $100 for Global Entry or TSA PreCheck application fees.",
+        summary:
+          "$100 airline incidental credit and up to $100 Global Entry or TSA PreCheck credit.",
+        tags: ["airline credit", "global entry", "tsa precheck", "travel"],
+        title: "Travel credits",
+        value: "Up to $200/year",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Bank of America travel and dining card with airline and trusted traveler credits.",
+    issuer: "Bank of America",
+    name: "Bank of America Premium Rewards Card",
+    section: "credit_card",
+    slug: "bofa-premium-rewards",
+    website:
+      "https://www.bankofamerica.com/credit-cards/products/premium-rewards-credit-card/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 4x points on dining, 2x points at grocery stores, at gas stations, and on streaming services, and 1x points on all other purchases, with no annual fee.",
+        summary: "4x dining, 2x grocery, gas, and streaming, 1x other.",
+        tags: [
+          "points",
+          "earning",
+          "4x dining",
+          "2x groceries",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "4x dining",
+      },
+      {
+        category: "streaming",
+        details:
+          "Includes a $15 annual streaming bonus that you can apply to a qualifying streaming service.",
+        summary: "$15 annual streaming bonus.",
+        tags: ["streaming", "credit", "annual"],
+        title: "Annual streaming bonus",
+        value: "$15/year",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee card with 4x on dining and 2x on groceries, gas, and streaming.",
+    issuer: "U.S. Bank",
+    name: "U.S. Bank Altitude Go Visa Signature Card",
+    section: "credit_card",
+    slug: "us-bank-altitude-go",
+    website:
+      "https://www.usbank.com/credit-cards/altitude-go-visa-signature-credit-card.html",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5% cash back on your first $2,000 in combined purchases in two categories you choose each quarter (such as utilities, cell phone providers, fast food, department stores, and more), 2% on one everyday category of your choice (grocery stores, gas stations, or restaurants), and 1% on all other purchases.",
+        summary:
+          "5% in two chosen categories (up to $2,000/quarter), 2% in one everyday category, 1% other.",
+        tags: [
+          "cash back",
+          "earning",
+          "5% chosen categories",
+          "2% everyday",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "5% chosen categories",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee card that lets you choose two 5% cash back categories each quarter.",
+    issuer: "U.S. Bank",
+    name: "U.S. Bank Cash+ Visa Signature Card",
+    section: "credit_card",
+    slug: "us-bank-cash-plus",
+    website:
+      "https://www.usbank.com/credit-cards/cash-plus-visa-signature-credit-card.html",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% Daily Cash at Apple and select merchants (such as Uber, Walgreens, and Nike), 2% Daily Cash on all purchases made with Apple Pay, and 1% Daily Cash on purchases made with the physical titanium card. No fees of any kind.",
+        summary:
+          "3% at Apple and select merchants, 2% on Apple Pay, 1% with the physical card.",
+        tags: [
+          "cash back",
+          "apple",
+          "apple pay",
+          "daily cash",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "2% on Apple Pay",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Apple's titanium card with Daily Cash, 2% on Apple Pay, and no fees.",
+    issuer: "Apple",
+    name: "Apple Card",
+    section: "credit_card",
+    slug: "apple-card",
+    website: "https://www.apple.com/apple-card/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "shopping",
+        details:
+          "Save 5% on most purchases at Target, get free 2-day shipping on hundreds of thousands of items, and get an extra 30 days for returns. No annual fee.",
+        summary: "5% off at Target, free 2-day shipping, and extended returns.",
+        tags: ["target", "cash back", "shipping", "returns", "no annual fee"],
+        title: "5% off at Target",
+        value: "5% back",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Target's store card with 5% off, free 2-day shipping, and extended returns.",
+    issuer: "Target",
+    name: "Target Circle Card",
+    section: "credit_card",
+    slug: "target-circle-card",
+    website: "https://www.target.com/circle",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn an unlimited 2% cash back on all purchases, with no annual fee and no categories to track. Cash back can be redeemed to your PayPal balance.",
+        summary: "Unlimited 2% cash back on every purchase.",
+        tags: ["cash back", "earning", "2%", "flat rate", "no annual fee"],
+        title: "Earning rates",
+        value: "2% everywhere",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee PayPal card earning an unlimited 2% cash back on all purchases.",
+    issuer: "PayPal",
+    name: "PayPal Cashback Mastercard",
+    section: "credit_card",
+    slug: "paypal-cashback-mastercard",
+    website: "https://www.paypal.com/us/webapps/mpp/credit-card",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Automatically earn up to 3% cash back in your top spend category, 2% in the next highest, and 1% on everything else each billing cycle, with no annual fee. Cash back is deposited into your Venmo account.",
+        summary:
+          "Up to 3% in your top category, 2% in the next, and 1% on the rest.",
+        tags: [
+          "cash back",
+          "earning",
+          "3% top category",
+          "venmo",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "Up to 3%",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee Venmo card with rotating top-category cash back paid to your Venmo balance.",
+    issuer: "Venmo",
+    name: "Venmo Credit Card",
+    section: "credit_card",
+    slug: "venmo-credit-card",
+    website: "https://venmo.com/about/creditcard/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 2% cash back on all purchases when you deposit the rewards into an eligible Fidelity account, with no annual fee and no limits.",
+        summary:
+          "2% cash back on everything when rewards go into an eligible Fidelity account.",
+        tags: ["cash back", "earning", "2%", "fidelity", "no annual fee"],
+        title: "Earning rates",
+        value: "2% everywhere",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee Fidelity card earning 2% back on all purchases into a Fidelity account.",
+    issuer: "Fidelity",
+    name: "Fidelity Rewards Visa Signature Card",
+    section: "credit_card",
+    slug: "fidelity-rewards-visa",
+    website: "https://www.fidelity.com/cash-management/credit-card",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 2% unlimited cash back on all purchases, and up to 3% for SoFi Plus members with qualifying direct deposit. Redeem as cash or toward investments, with no annual fee.",
+        summary:
+          "2% unlimited cash back (up to 3% for qualifying SoFi Plus members).",
+        tags: ["cash back", "earning", "2%", "sofi", "no annual fee"],
+        title: "Earning rates",
+        value: "2% everywhere",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee SoFi card with 2% unlimited cash back and a higher rate for SoFi Plus members.",
+    issuer: "SoFi",
+    name: "SoFi Credit Card",
+    section: "credit_card",
+    slug: "sofi-credit-card",
+    website: "https://www.sofi.com/credit-card/",
+  },
+  {
+    annualFee: 5000,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% cash back on all purchases, with no foreign transaction fees. The card requires a Robinhood Gold membership (currently $5 per month) and rewards are deposited into your Robinhood brokerage account.",
+        summary:
+          "3% cash back on everything, with a Robinhood Gold membership required.",
+        tags: ["cash back", "earning", "3%", "robinhood", "flat rate"],
+        title: "Earning rates",
+        value: "3% everywhere",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Robinhood's flat-rate card earning 3% back on everything, for Gold members.",
+    issuer: "Robinhood",
+    name: "Robinhood Gold Card",
+    section: "credit_card",
+    slug: "robinhood-gold-card",
+    website: "https://robinhood.com/creditcard/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% back at gas stations, grocery stores, and on dining, 2% back at Best Buy, and 1% back on all other purchases, plus flexible financing options on Best Buy purchases.",
+        summary:
+          "3% gas, grocery, and dining, 2% at Best Buy, 1% other, with financing options.",
+        tags: ["cash back", "earning", "3% gas", "2% best buy", "financing"],
+        title: "Earning rates",
+        value: "3% bonus categories",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Best Buy card with 3% back on gas, groceries, and dining plus 2% at Best Buy.",
+    issuer: "Citi",
+    name: "Best Buy Visa Card",
+    section: "credit_card",
+    slug: "best-buy-visa",
+    website: "https://www.bestbuy.com/site/credit-cards/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "shopping",
+        details:
+          "With an eligible Prime membership, earn 5% back on Amazon.com purchases. The card also offers promotional financing options on qualifying Amazon purchases, with no annual fee.",
+        summary:
+          "5% back at Amazon with Prime, plus promotional financing options.",
+        tags: ["amazon", "prime", "store card", "5% back", "financing"],
+        title: "Amazon rewards and financing",
+        value: "5% at Amazon",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Amazon store card with 5% back for Prime members and promotional financing.",
+    issuer: "Synchrony",
+    name: "Amazon Store Card",
+    section: "credit_card",
+    slug: "amazon-store-card",
+    website: "https://www.amazon.com/gp/cobrandcard/store",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 5% cash back on gas and EV charging on up to $6,000 per year in purchases (then 1%), 3% back on dining, 3% back at Sam's Club, and 1% back on all other purchases, with no annual fee.",
+        summary:
+          "5% gas/EV (up to $6k/yr), 3% dining and Sam's Club, 1% other.",
+        tags: ["cash back", "earning", "5% gas", "3% dining", "no annual fee"],
+        title: "Earning rates",
+        value: "5% gas",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Sam's Club card with 5% back on gas and 3% on dining and Sam's Club purchases.",
+    issuer: "Synchrony",
+    name: "Sam's Club Mastercard",
+    section: "credit_card",
+    slug: "sams-club-mastercard",
+    website: "https://www.samsclub.com/credit",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 4% cash back at gas stations, 3% on dining, 2% at grocery stores, and 1% on all other purchases, on up to $8,000 in combined purchases each year, with no annual fee.",
+        summary:
+          "4% gas, 3% dining, 2% grocery, 1% other (up to $8k/yr combined).",
+        tags: ["cash back", "earning", "4% gas", "3% dining", "no annual fee"],
+        title: "Earning rates",
+        value: "4% gas",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee PNC card with 4% back on gas, 3% on dining, and 2% on groceries.",
+    issuer: "PNC",
+    name: "PNC Cash Rewards Visa Signature Card",
+    section: "credit_card",
+    slug: "pnc-cash-rewards",
+    website:
+      "https://www.pnc.com/en/personal-banking/banking/credit-cards/cash-rewards.html",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3% cash back on dining, 2% cash back at grocery stores, and 1% cash back on all other purchases, with no annual fee.",
+        summary: "3% dining, 2% grocery, 1% other, with no annual fee.",
+        tags: [
+          "cash back",
+          "earning",
+          "3% dining",
+          "2% grocery",
+          "no annual fee",
+        ],
+        title: "Earning rates",
+        value: "3% dining",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee TD Bank card with 3% back on dining and 2% on groceries.",
+    issuer: "TD Bank",
+    name: "TD Cash Credit Card",
+    section: "credit_card",
+    slug: "td-cash",
+    website: "https://www.td.com/us/en/personal-banking/credit-cards/cash/",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "rewards",
+        details:
+          "Earn 3x points on JetBlue purchases, 2x points at restaurants and grocery stores, and 1x points on all other purchases, with no annual fee and no foreign transaction fees.",
+        summary:
+          "3x JetBlue, 2x dining and grocery, 1x other, with no foreign transaction fees.",
+        tags: ["points", "earning", "jetblue", "3x", "airline"],
+        title: "Earning rates",
+        value: "3x JetBlue",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "No-annual-fee JetBlue card with 3x on JetBlue and 2x on dining and groceries.",
+    issuer: "Barclays",
+    name: "JetBlue Card",
+    section: "credit_card",
+    slug: "jetblue-card",
+    website: "https://www.barclaysus.com/credit-cards/jetblue.html",
+  },
+  {
+    annualFee: 0,
+    benefits: [
+      {
+        category: "shopping",
+        details:
+          "Offers promotional financing and project loan options on qualifying Home Depot purchases, plus $0 fraud liability and the ability to manage the card in the Home Depot app. No annual fee.",
+        summary:
+          "Promotional financing and project loans at Home Depot with $0 fraud liability.",
+        tags: ["home depot", "financing", "project loan", "store card"],
+        title: "Financing options",
+      },
+    ],
+    category: "credit_card",
+    description:
+      "Home Depot store card offering promotional financing and project loans.",
+    issuer: "Citi",
+    name: "Home Depot Consumer Credit Card",
+    section: "credit_card",
+    slug: "home-depot-consumer-card",
+    website: "https://www.homedepot.com/c/credit_center",
+  },
 ];
 
 /**
@@ -2494,6 +4021,41 @@ const relations: { child: string; note?: string; parent: string }[] = [
     child: "grubhub-plus",
     note: "Grubhub+ included free with Prime",
     parent: "amazon-prime",
+  },
+  {
+    child: "hilton-honors-diamond",
+    note: "Complimentary Hilton Honors Diamond status",
+    parent: "hilton-honors-aspire",
+  },
+  {
+    child: "priority-pass",
+    note: "Priority Pass Select membership included",
+    parent: "hilton-honors-aspire",
+  },
+  {
+    child: "marriott-bonvoy-platinum",
+    note: "Complimentary Marriott Bonvoy Platinum Elite status",
+    parent: "marriott-bonvoy-brilliant",
+  },
+  {
+    child: "priority-pass",
+    note: "Priority Pass Select membership included",
+    parent: "marriott-bonvoy-brilliant",
+  },
+  {
+    child: "hyatt-discoverist",
+    note: "Complimentary World of Hyatt Discoverist status",
+    parent: "world-of-hyatt-credit-card",
+  },
+  {
+    child: "ihg-platinum",
+    note: "Complimentary IHG One Rewards Platinum Elite status",
+    parent: "ihg-one-rewards-premier",
+  },
+  {
+    child: "clear-plus",
+    note: "Up to $100 annual statement credit for CLEAR Plus",
+    parent: "amex-green",
   },
 ];
 

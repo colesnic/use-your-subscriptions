@@ -82,11 +82,15 @@ export function providerDomain(
   }
 }
 
-export function providerLogoUrl(
-  website: string | null | undefined
-): string | null {
+export function providerLogoUrls(website: string | null | undefined): string[] {
   const domain = providerDomain(website);
-  return domain ? `https://unavatar.io/${domain}` : null;
+  if (!domain) {
+    return [];
+  }
+  return [
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+  ];
 }
 
 export const SECTION_LABELS: Record<string, string> = Object.fromEntries(

@@ -2,7 +2,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { providerLogoUrl } from "@/lib/subscriptions";
+import { providerLogoUrls } from "@/lib/subscriptions";
 import { cn } from "@/lib/utils";
 
 function initials(name: string) {
@@ -23,14 +23,23 @@ export function ProviderLogo({
   name: string;
   website?: string | null;
 }) {
-  const logo = providerLogoUrl(website);
+  const urls = providerLogoUrls(website);
+  const [index, setIndex] = useState(0);
   const [failed, setFailed] = useState(false);
 
   const handleError = useCallback(() => {
-    setFailed(true);
-  }, []);
+    setIndex((current) => {
+      const next = current + 1;
+      if (next >= urls.length) {
+        setFailed(true);
+      }
+      return next;
+    });
+  }, [urls.length]);
 
-  if (!logo || failed) {
+  const src = urls[index];
+
+  if (!src || failed) {
     return (
       <span
         className={cn(
@@ -54,7 +63,7 @@ export function ProviderLogo({
       height={24}
       loading="lazy"
       onError={handleError}
-      src={logo}
+      src={src}
       width={24}
     />
   );
