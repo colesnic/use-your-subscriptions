@@ -7,8 +7,8 @@
  * diffs them against D1, and stores reviewable proposals. Nothing is applied
  * automatically.
  *
- * Manual trigger: GET /run?token=<SYNC_TOKEN>
- * List proposals: GET /proposals?token=<SYNC_TOKEN>
+ * Manual trigger: GET /run with `Authorization: Bearer <SYNC_TOKEN>`
+ * List proposals: GET /proposals with `Authorization: Bearer <SYNC_TOKEN>`
  */
 
 interface Env {
@@ -49,7 +49,42 @@ function nowSeconds() {
   return Math.floor(Date.now() / 1000);
 }
 
+function isSafeFetchUrl(rawUrl: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    return false;
+  }
+
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return false;
+  }
+
+  const hostname = url.hostname.toLowerCase();
+  if (hostname.startsWith("[") || hostname.includes(":")) {
+    return false;
+  }
+  if (/^\d+(\.\d+){3}$/.test(hostname)) {
+    return false;
+  }
+  if (
+    hostname === "localhost" ||
+    hostname.endsWith(".localhost") ||
+    hostname.endsWith(".local") ||
+    hostname.endsWith(".internal")
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 async function fetchText(url: string): Promise<string> {
+  if (!isSafeFetchUrl(url)) {
+    throw new Error("refusing to fetch unsafe url");
+  }
+
   const response = await fetch(url, {
     headers: {
       "User-Agent":
@@ -75,13 +110,17 @@ async function fetchText(url: string): Promise<string> {
     .trim();
 }
 
-function parseJson(text: string): { benefits?: ExtractedBenefit[] } {
+function parseJson(text: string): { benefits?: unknown } {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
   if (start === -1 || end === -1) {
     return {};
   }
-  return JSON.parse(text.slice(start, end + 1));
+  try {
+    return JSON.parse(text.slice(start, end + 1));
+  } catch {
+    return {};
+  }
 }
 
 async function extractBenefits(
@@ -128,7 +167,16 @@ ${text.slice(0, MAX_CHARS)}`;
     choices?: { message?: { content?: string } }[];
   };
   const content = json.choices?.[0]?.message?.content ?? "";
-  return parseJson(content).benefits ?? [];
+  const parsed = parseJson(content);
+  const rawBenefits = Array.isArray(parsed.benefits) ? parsed.benefits : [];
+  return rawBenefits.filter(
+    (item): item is ExtractedBenefit =>
+      typeof item === "object" &&
+      item !== null &&
+      typeof (item as ExtractedBenefit).title === "string" &&
+      typeof (item as ExtractedBenefit).summary === "string" &&
+      typeof (item as ExtractedBenefit).details === "string"
+  );
 }
 
 function normalize(title: string) {
@@ -267,12 +315,33 @@ async function run(env: Env) {
   return results;
 }
 
-function authorized(request: Request, env: Env) {
-  if (!env.SYNC_TOKEN) {
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) {
     return false;
   }
-  const token = new URL(request.url).searchParams.get("token");
-  return token === env.SYNC_TOKEN;
+  let diff = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
+function authorized(request: Request, env: Env) {
+  const token = env.SYNC_TOKEN;
+  if (!token) {
+    return false;
+  }
+
+  const header = request.headers.get("authorization");
+  const provided = header?.startsWith("Bearer ")
+    ? header.slice("Bearer ".length)
+    : null;
+
+  if (!provided) {
+    return false;
+  }
+
+  return timingSafeEqual(provided, token);
 }
 
 export default {

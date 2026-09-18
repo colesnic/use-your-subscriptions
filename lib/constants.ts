@@ -9,6 +9,9 @@ export const isTestEnvironment = Boolean(
 export const guestRegex = /^guest-\d+$/;
 
 export const MAX_MESSAGE_LENGTH = 200;
+export const MAX_CONVERSATION_MESSAGES = 50;
+export const MAX_CONVERSATION_CHARS = 40_000;
+export const MAX_SUBSCRIPTION_IDS = 200;
 
 /**
  * The app is anonymous (no auth). Documents/artifacts are attributed to this
