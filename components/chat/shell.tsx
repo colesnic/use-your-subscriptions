@@ -22,7 +22,7 @@ import { submitEditedMessage } from "./message-editor";
 import { Messages } from "./messages";
 import { MultimodalInput } from "./multimodal-input";
 
-export function ChatShell() {
+export function ChatShell({ suggestions }: { suggestions: string[] }) {
   const {
     messages,
     setMessages,
@@ -139,6 +139,7 @@ export function ChatShell() {
                   setMessages={setMessages}
                   status={status}
                   stop={stop}
+                  suggestions={suggestions}
                 />
               )}
             </div>

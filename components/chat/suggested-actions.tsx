@@ -3,7 +3,6 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
 import { memo, useCallback } from "react";
-import { suggestions } from "@/lib/constants";
 import type { ChatMessage } from "@/lib/types";
 import { Suggestion } from "../ai-elements/suggestion";
 import type { VisibilityType } from "./visibility-selector";
@@ -11,10 +10,14 @@ import type { VisibilityType } from "./visibility-selector";
 type SuggestedActionsProps = {
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   selectedVisibilityType: VisibilityType;
+  suggestions: string[];
 };
 
-function PureSuggestedActions({ sendMessage }: SuggestedActionsProps) {
-  const suggestedActions = suggestions;
+function PureSuggestedActions({
+  sendMessage,
+  suggestions: items,
+}: SuggestedActionsProps) {
+  const suggestedActions = items;
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
       sendMessage({

@@ -1,28 +1,71 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/server";
 import {
+  type BenefitState,
+  computeBenefitStates,
+  totalConfirmedSavings,
+} from "@/lib/benefit-state";
+import {
   getUserBenefits,
   getUserProviderIds,
   getUserUsage,
 } from "@/lib/db/account";
-import {
-  annualizedValue,
-  currentPeriod,
-  daysUntil,
-  formatUsd,
-  nextResetAt,
-} from "@/lib/periods";
+import { formatUsd } from "@/lib/periods";
 
 type Recommendation = {
-  id: string;
-  title: string;
-  providerName: string;
-  value: string | null;
-  reason: string;
   daysLeft: number | null;
+  id: string;
   priority: number;
+  providerName: string;
+  reason: string;
   score: number;
+  title: string;
+  value: string | null;
 };
+
+function toRecommendation(state: BenefitState): Recommendation | null {
+  const { benefit, daysLeft, annualValue } = state;
+  const recurring = Boolean(
+    benefit.resetFrequency && benefit.resetFrequency !== "none"
+  );
+
+  let priority: number | null = null;
+  let reason = "";
+
+  if (recurring && daysLeft !== null && daysLeft <= 14) {
+    priority = 1;
+    reason = "Use before this period resets.";
+  } else if (recurring && benefit.monetaryValue) {
+    priority = 2;
+    reason = "Recurring credit you have not used yet.";
+  } else if (annualValue > 0) {
+    priority = 3;
+    reason = "High-value benefit in your profile.";
+  } else if (benefit.activationRequired) {
+    priority = 4;
+    reason = "Needs activation to use.";
+  } else if (
+    benefit.tags?.some((tag) => tag === "credit" || tag === "insurance")
+  ) {
+    priority = 5;
+    reason = "Commonly useful benefit you have not marked as used.";
+  }
+
+  if (priority === null) {
+    return null;
+  }
+
+  return {
+    daysLeft,
+    id: benefit.id,
+    priority,
+    providerName: benefit.providerName,
+    reason,
+    score: annualValue,
+    title: benefit.title,
+    value: benefit.value ?? null,
+  };
+}
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -36,79 +79,14 @@ export default async function DashboardPage() {
     getUserUsage(user.id),
   ]);
 
-  const now = new Date();
-  const usedKeys = new Set(
-    usage
-      .filter((row) => row.status === "used")
-      .map((row) => `${row.benefitId}:${row.period}`)
-  );
-  const irrelevantKeys = new Set(
-    usage
-      .filter((row) => row.status === "not_relevant")
-      .map((row) => `${row.benefitId}:${row.period}`)
-  );
+  const states = computeBenefitStates(benefits, usage);
+  const annualValue = states.reduce((total, s) => total + s.annualValue, 0);
+  const confirmedSavings = totalConfirmedSavings(usage);
 
-  const annualValue = benefits.reduce(
-    (total, item) =>
-      total + annualizedValue(item.monetaryValue, item.valuePeriod),
-    0
-  );
-
-  const recurring = (frequency: string | null) =>
-    Boolean(frequency && frequency !== "none");
-
-  const candidates: Recommendation[] = [];
-
-  for (const item of benefits) {
-    const period = currentPeriod(item.resetFrequency, now);
-    const key = period ? `${item.id}:${period}` : null;
-    if (key && (usedKeys.has(key) || irrelevantKeys.has(key))) {
-      continue;
-    }
-
-    const resetAt = nextResetAt(item.resetFrequency, now);
-    const daysLeft = resetAt ? daysUntil(resetAt, now) : null;
-    const value = annualizedValue(item.monetaryValue, item.valuePeriod);
-    const isRecurring = recurring(item.resetFrequency);
-    const valueLabel = item.value ?? null;
-
-    let priority: number | null = null;
-    let reason = "";
-
-    if (isRecurring && daysLeft !== null && daysLeft <= 14) {
-      priority = 1;
-      reason = "Use before this period resets.";
-    } else if (isRecurring && item.monetaryValue) {
-      priority = 2;
-      reason = "Recurring credit you have not used yet.";
-    } else if (value > 0) {
-      priority = 3;
-      reason = "High-value benefit in your profile.";
-    } else if (item.activationRequired) {
-      priority = 4;
-      reason = "Needs activation to use.";
-    } else if (
-      item.tags?.some((tag) => tag === "credit" || tag === "insurance")
-    ) {
-      priority = 5;
-      reason = "Commonly useful benefit you have not marked as used.";
-    }
-
-    if (priority === null) {
-      continue;
-    }
-
-    candidates.push({
-      daysLeft,
-      id: item.id,
-      priority,
-      providerName: item.providerName,
-      reason,
-      score: value,
-      title: item.title,
-      value: valueLabel,
-    });
-  }
+  const candidates = states
+    .filter((state) => !(state.used || state.irrelevant))
+    .map(toRecommendation)
+    .filter((entry): entry is Recommendation => entry !== null);
 
   const recommendations = candidates
     .sort((a, b) => {
@@ -124,8 +102,11 @@ export default async function DashboardPage() {
     })
     .slice(0, 6);
 
-  const useSoonCount = candidates.filter(
-    (entry) => entry.daysLeft !== null && entry.daysLeft <= 14
+  const useSoonCount = states.filter(
+    (state) =>
+      !(state.used || state.irrelevant) &&
+      state.daysLeft !== null &&
+      state.daysLeft <= 14
   ).length;
 
   const stats = [
@@ -164,6 +145,20 @@ export default async function DashboardPage() {
         Potential annual benefit value is based only on benefits with explicit
         dollar values. Actual value depends on usage.
       </p>
+
+      {confirmedSavings > 0 ? (
+        <section className="flex flex-col gap-1 rounded-2xl border border-border/60 bg-card p-5">
+          <span className="text-muted-foreground text-xs">
+            MembershipMaxxing has helped you use
+          </span>
+          <span className="font-serif text-3xl font-medium">
+            {formatUsd(confirmedSavings)}
+          </span>
+          <span className="text-muted-foreground text-xs">
+            in benefits, based on what you confirmed using.
+          </span>
+        </section>
+      ) : null}
 
       {providerIds.length === 0 ? (
         <section className="flex flex-col items-start gap-3 rounded-2xl border border-border/60 bg-card p-6">
@@ -236,13 +231,13 @@ export default async function DashboardPage() {
           </Link>
           <Link
             className="rounded-lg border border-border/60 px-3 py-1.5"
-            href="/benefits?filter=expiring"
+            href="/expiring"
           >
             Expiring soon
           </Link>
           <Link
             className="rounded-lg border border-border/60 px-3 py-1.5"
-            href="/benefits?filter=unused"
+            href="/unused"
           >
             Unused
           </Link>

@@ -6,10 +6,12 @@ import type { ChildRelation } from "@/components/subscriptions/subscription-cata
 import { SubscriptionCatalogProvider } from "@/components/subscriptions/subscription-catalog-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ActiveChatProvider } from "@/hooks/use-active-chat";
+import { getSessionUser } from "@/lib/auth/session";
 import {
   getAllProvidersWithBenefitCounts,
   getProviderRelations,
 } from "@/lib/db/queries";
+import { getRecommendedQuestions } from "@/lib/recommendations";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,6 +28,8 @@ async function ChatPage({ children }: { children: React.ReactNode }) {
     getAllProvidersWithBenefitCounts(),
     getProviderRelations(),
   ]);
+  const user = await getSessionUser();
+  const suggestions = await getRecommendedQuestions(user?.id ?? null);
 
   const relationsByParent = relations.reduce(
     (acc, relation) => {
@@ -58,7 +62,7 @@ async function ChatPage({ children }: { children: React.ReactNode }) {
           />
           <Suspense fallback={<div className="flex h-dvh" />}>
             <ActiveChatProvider>
-              <ChatShell />
+              <ChatShell suggestions={suggestions} />
             </ActiveChatProvider>
           </Suspense>
           {children}

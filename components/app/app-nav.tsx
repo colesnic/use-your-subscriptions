@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 const LINKS = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/benefits", label: "Benefits" },
+  { href: "/unused", label: "Unused" },
+  { href: "/expiring", label: "Expiring" },
   { href: "/setup", label: "My products" },
   { href: "/chat", label: "Ask" },
 ];
@@ -30,7 +32,7 @@ export function AppNav({ email }: { email: string | null }) {
         <Link className="font-serif text-[15px] font-medium" href="/dashboard">
           MembershipMaxxing
         </Link>
-        <nav className="ml-auto flex items-center gap-0.5 text-sm">
+        <nav className="ml-auto flex min-w-0 items-center gap-0.5 overflow-x-auto text-sm">
           {LINKS.map((link) => (
             <Link
               className={cn(

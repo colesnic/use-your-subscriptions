@@ -54,6 +54,7 @@ function PureMultimodalInput({
   editingMessage,
   onCancelEdit,
   isLoading,
+  suggestions,
 }: {
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
@@ -73,6 +74,7 @@ function PureMultimodalInput({
   editingMessage?: ChatMessage | null;
   onCancelEdit?: () => void;
   isLoading?: boolean;
+  suggestions: string[];
 }) {
   const router = useRouter();
   const { setTheme, resolvedTheme } = useTheme();
@@ -316,6 +318,7 @@ function PureMultimodalInput({
           <SuggestedActions
             selectedVisibilityType={selectedVisibilityType}
             sendMessage={sendMessage}
+            suggestions={suggestions}
           />
         )}
 
