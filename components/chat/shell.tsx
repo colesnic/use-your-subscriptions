@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,11 +12,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useActiveChat } from "@/hooks/use-active-chat";
-import {
-  initialArtifactData,
-  useArtifact,
-  useArtifactSelector,
-} from "@/hooks/use-artifact";
+import { useArtifactSelector } from "@/hooks/use-artifact";
 import type { Attachment, ChatMessage } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Artifact } from "./artifact";
@@ -28,7 +24,6 @@ import { MultimodalInput } from "./multimodal-input";
 
 export function ChatShell() {
   const {
-    chatId,
     messages,
     setMessages,
     sendMessage,
@@ -53,21 +48,6 @@ export function ChatShell() {
   );
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const isArtifactVisible = useArtifactSelector((state) => state.isVisible);
-  const { setArtifact } = useArtifact();
-
-  const stopRef = useRef(stop);
-  stopRef.current = stop;
-
-  const prevChatIdRef = useRef(chatId);
-  useEffect(() => {
-    if (prevChatIdRef.current !== chatId) {
-      prevChatIdRef.current = chatId;
-      stopRef.current();
-      setArtifact(initialArtifactData);
-      setEditingMessage(null);
-      setAttachments([]);
-    }
-  }, [chatId, setArtifact]);
 
   const handleEditMessage = useCallback(
     (msg: ChatMessage) => {
@@ -120,7 +100,6 @@ export function ChatShell() {
           )}
         >
           <ChatHeader
-            chatId={chatId}
             isReadonly={isReadonly}
             selectedVisibilityType={visibilityType}
           />
@@ -128,7 +107,6 @@ export function ChatShell() {
           <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-background md:rounded-tl-[12px] md:border-t md:border-l md:border-border/40">
             <Messages
               addToolApprovalResponse={addToolApprovalResponse}
-              chatId={chatId}
               isArtifactVisible={isArtifactVisible}
               isLoading={isLoading}
               isReadonly={isReadonly}
@@ -145,7 +123,6 @@ export function ChatShell() {
               {!isReadonly && (
                 <MultimodalInput
                   attachments={attachments}
-                  chatId={chatId}
                   editingMessage={editingMessage}
                   input={input}
                   isLoading={isLoading}
@@ -171,7 +148,6 @@ export function ChatShell() {
         <Artifact
           addToolApprovalResponse={addToolApprovalResponse}
           attachments={attachments}
-          chatId={chatId}
           input={input}
           isReadonly={isReadonly}
           messages={messages}

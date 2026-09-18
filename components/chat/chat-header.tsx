@@ -13,11 +13,9 @@ import type { VisibilityType } from "./visibility-selector";
 const CONTACT_EMAIL = "Nickcolesp@gmail.com";
 
 function PureChatHeader({
-  chatId: _chatId,
   selectedVisibilityType: _selectedVisibilityType,
   isReadonly: _isReadonly,
 }: {
-  chatId: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
 }) {
@@ -45,7 +43,6 @@ function PureChatHeader({
 export const ChatHeader = memo(
   PureChatHeader,
   (prevProps, nextProps) =>
-    prevProps.chatId === nextProps.chatId &&
     prevProps.selectedVisibilityType === nextProps.selectedVisibilityType &&
     prevProps.isReadonly === nextProps.isReadonly
 );

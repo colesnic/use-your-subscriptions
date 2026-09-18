@@ -1,6 +1,6 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { ArrowDownIcon } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback } from "react";
 import { SubscriptionPromptCard } from "@/components/subscriptions/subscriptions-dialog";
 import { useMessages } from "@/hooks/use-messages";
 import type { Vote } from "@/lib/db/schema";
@@ -12,7 +12,6 @@ import { PreviewMessage, ThinkingMessage } from "./message";
 
 type MessagesProps = {
   addToolApprovalResponse: UseChatHelpers<ChatMessage>["addToolApprovalResponse"];
-  chatId: string;
   status: UseChatHelpers<ChatMessage>["status"];
   votes: Vote[] | undefined;
   messages: ChatMessage[];
@@ -27,7 +26,6 @@ type MessagesProps = {
 
 function PureMessages({
   addToolApprovalResponse,
-  chatId,
   status,
   votes,
   messages,
@@ -45,20 +43,11 @@ function PureMessages({
     isAtBottom,
     scrollToBottom,
     hasSentMessage,
-    reset,
   } = useMessages({
     status,
   });
 
   useDataStream();
-
-  const prevChatIdRef = useRef(chatId);
-  useEffect(() => {
-    if (prevChatIdRef.current !== chatId) {
-      prevChatIdRef.current = chatId;
-      reset();
-    }
-  }, [chatId, reset]);
 
   const handleScrollToBottom = useCallback(() => {
     scrollToBottom("smooth");
@@ -84,7 +73,6 @@ function PureMessages({
           {messages.map((message, index) => (
             <PreviewMessage
               addToolApprovalResponse={addToolApprovalResponse}
-              chatId={chatId}
               isLoading={
                 status === "streaming" && messages.length - 1 === index
               }

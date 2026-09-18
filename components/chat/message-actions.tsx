@@ -15,7 +15,6 @@ export function PureMessageActions({
   isLoading,
   onEdit,
 }: {
-  chatId: string;
   message: ChatMessage;
   vote: Vote | undefined;
   isLoading: boolean;

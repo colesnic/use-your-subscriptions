@@ -40,7 +40,6 @@ import { SuggestedActions } from "./suggested-actions";
 import type { VisibilityType } from "./visibility-selector";
 
 function PureMultimodalInput({
-  chatId,
   input,
   setInput,
   status,
@@ -56,7 +55,6 @@ function PureMultimodalInput({
   onCancelEdit,
   isLoading,
 }: {
-  chatId: string;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
   status: UseChatHelpers<ChatMessage>["status"];
@@ -157,10 +155,6 @@ function PureMultimodalInput({
             action: {
               label: "Delete",
               onClick: () => {
-                fetch(
-                  `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/chat?id=${chatId}`,
-                  { method: "DELETE" }
-                );
                 router.push("/");
                 toast.success("Chat deleted");
               },
@@ -188,16 +182,10 @@ function PureMultimodalInput({
           break;
       }
     },
-    [chatId, resolvedTheme, router, setInput, setMessages, setTheme]
+    [resolvedTheme, router, setInput, setMessages, setTheme]
   );
 
   const submitForm = useCallback(() => {
-    window.history.pushState(
-      {},
-      "",
-      `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/chat/${chatId}`
-    );
-
     sendMessage({
       parts: [
         ...attachments.map((attachment) => ({
@@ -229,7 +217,6 @@ function PureMultimodalInput({
     setAttachments,
     setLocalStorageInput,
     width,
-    chatId,
   ]);
 
   const handleCancelEditMouseDown = useCallback(
@@ -327,7 +314,6 @@ function PureMultimodalInput({
         messages.length === 0 &&
         attachments.length === 0 && (
           <SuggestedActions
-            chatId={chatId}
             selectedVisibilityType={selectedVisibilityType}
             sendMessage={sendMessage}
           />

@@ -54,7 +54,6 @@ export type UIArtifact = {
 
 function PureArtifact({
   addToolApprovalResponse: _addToolApprovalResponse,
-  chatId: _chatId,
   input: _input,
   setInput: _setInput,
   status,
@@ -71,7 +70,6 @@ function PureArtifact({
   selectedModelId: _selectedModelId,
 }: {
   addToolApprovalResponse: UseChatHelpers<ChatMessage>["addToolApprovalResponse"];
-  chatId: string;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
   status: UseChatHelpers<ChatMessage>["status"];

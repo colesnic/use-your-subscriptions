@@ -25,7 +25,6 @@ import type { ChatMessage } from "@/lib/types";
 import { fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
 
 type ActiveChatContextValue = {
-  chatId: string;
   messages: ChatMessage[];
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
@@ -50,10 +49,6 @@ const ActiveChatContext = createContext<ActiveChatContextValue | null>(null);
 export function ActiveChatProvider({ children }: { children: ReactNode }) {
   const { setDataStream, setWaitingStatus } = useDataStream();
 
-  // Single-page, no persistence: one in-memory conversation per page load.
-  const chatIdRef = useRef(generateUUID());
-  const chatId = chatIdRef.current;
-
   const [currentModelId, setCurrentModelId] = useState(DEFAULT_CHAT_MODEL);
   const currentModelIdRef = useRef(currentModelId);
   useEffect(() => {
@@ -73,7 +68,6 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
     addToolApprovalResponse,
   } = useChat<ChatMessage>({
     generateId: generateUUID,
-    id: chatId,
     onData: (dataPart) => {
       if (dataPart.type === "data-waiting-status") {
         setWaitingStatus(dataPart.data);
@@ -113,7 +107,6 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
         // or reload chat history.
         return {
           body: {
-            id: request.id,
             messages: request.messages,
             selectedChatModel: currentModelIdRef.current,
             selectedVisibilityType: "private",
@@ -134,7 +127,6 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
   const value = useMemo<ActiveChatContextValue>(
     () => ({
       addToolApprovalResponse,
-      chatId,
       currentModelId,
       input,
       isLoading: false,
@@ -154,7 +146,6 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
     }),
     [
       addToolApprovalResponse,
-      chatId,
       currentModelId,
       input,
       messages,

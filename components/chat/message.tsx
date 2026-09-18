@@ -83,7 +83,6 @@ function ToolApprovalActions({
 
 const PurePreviewMessage = ({
   addToolApprovalResponse,
-  chatId,
   message,
   vote,
   isLoading,
@@ -94,7 +93,6 @@ const PurePreviewMessage = ({
   onEdit,
 }: {
   addToolApprovalResponse: UseChatHelpers<ChatMessage>["addToolApprovalResponse"];
-  chatId: string;
   message: ChatMessage;
   vote: Vote | undefined;
   isLoading: boolean;
@@ -361,7 +359,6 @@ const PurePreviewMessage = ({
 
   const actions = !isReadonly && (
     <MessageActions
-      chatId={chatId}
       isLoading={isLoading}
       key={`action-${message.id}`}
       message={message}
