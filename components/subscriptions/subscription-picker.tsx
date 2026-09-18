@@ -12,12 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { useSelectedSubscriptionIds } from "@/hooks/use-subscriptions";
 import {
   getSelectedSubscriptionIds,
@@ -204,28 +198,28 @@ export function SubscriptionPicker({
   return (
     <div className="flex flex-col gap-8">
       <div className="sticky top-0 z-20 -mx-1 bg-background/95 px-1 pb-1 backdrop-blur">
-        <InputGroup>
-          <InputGroupAddon>
-            <SearchIcon />
-          </InputGroupAddon>
-          <InputGroupInput
+        <div className="flex h-9 items-center gap-2 rounded-4xl border border-input bg-input/30 px-3">
+          <SearchIcon className="size-4 shrink-0 text-muted-foreground" />
+          <input
             aria-label="Search subscriptions"
+            autoComplete="off"
+            className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             onChange={handleSearchChange}
             placeholder="Search cards and memberships"
+            type="text"
             value={query}
           />
           {query ? (
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton
-                aria-label="Clear search"
-                onClick={handleClearSearch}
-                size="icon-xs"
-              >
-                <XIcon />
-              </InputGroupButton>
-            </InputGroupAddon>
+            <button
+              aria-label="Clear search"
+              className="flex size-5 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
+              onClick={handleClearSearch}
+              type="button"
+            >
+              <XIcon className="size-3.5" />
+            </button>
           ) : null}
-        </InputGroup>
+        </div>
       </div>
 
       {grouped.map(([sectionId, sectionProviders]) => (
