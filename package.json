@@ -20,7 +20,7 @@
     "db:d1:migrate": "wrangler d1 migrations apply chatbot-db --remote",
     "db:d1:seed:local": "wrangler d1 execute chatbot-db --local --file=lib/db/seed.sql",
     "db:d1:seed": "wrangler d1 execute chatbot-db --remote --file=lib/db/seed.sql",
-    "db:dump": "sqlite3 local.db .dump > lib/db/seed.sql",
+    "db:dump": "tsx lib/db/dump-seed.ts",
     "sync:deploy": "wrangler deploy --config workers/benefits-sync/wrangler.jsonc",
     "sync:tail": "wrangler tail benefits-sync",
     "db:studio": "drizzle-kit studio",

@@ -5,6 +5,9 @@ declare module "cloudflare:workers" {
     CHAT_RATE_LIMITER?: {
       limit: (options: { key: string }) => Promise<{ success: boolean }>;
     };
+    AUTH_RATE_LIMITER?: {
+      limit: (options: { key: string }) => Promise<{ success: boolean }>;
+    };
     [key: string]: unknown;
   };
 }

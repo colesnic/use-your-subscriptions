@@ -750,15 +750,23 @@ export async function getBenefitsForProviderIds({
   try {
     const rows = await db
       .select({
+        activationInstructions: benefit.activationInstructions,
+        activationRequired: benefit.activationRequired,
         category: benefit.category,
         details: benefit.details,
         effectiveFrom: benefit.effectiveFrom,
         effectiveTo: benefit.effectiveTo,
+        expiresAt: benefit.expiresAt,
         howToUse: benefit.howToUse,
         id: benefit.id,
+        keywords: benefit.keywords,
         lastVerifiedAt: benefit.lastVerifiedAt,
+        monetaryValue: benefit.monetaryValue,
+        officialUrl: benefit.officialUrl,
         providerId: benefit.providerId,
         providerName: provider.name,
+        resetFrequency: benefit.resetFrequency,
+        restrictions: benefit.restrictions,
         sourceSnippet: benefit.sourceSnippet,
         sourceType: benefit.sourceType,
         sourceUrl: benefit.sourceUrl,
@@ -767,6 +775,7 @@ export async function getBenefitsForProviderIds({
         tags: benefit.tags,
         title: benefit.title,
         value: benefit.value,
+        valuePeriod: benefit.valuePeriod,
         verifiedBy: benefit.verifiedBy,
       })
       .from(benefit)

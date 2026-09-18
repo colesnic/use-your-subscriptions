@@ -3,6 +3,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { useSearchParams } from "next/navigation";
 import {
   createContext,
   type Dispatch,
@@ -57,6 +58,14 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
 
   const [input, setInput] = useState("");
   const [showCreditCardAlert, setShowCreditCardAlert] = useState(false);
+
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const prefill = searchParams.get("q");
+    if (prefill) {
+      setInput(prefill);
+    }
+  }, [searchParams]);
 
   const {
     messages,

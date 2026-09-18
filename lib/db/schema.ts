@@ -13,7 +13,7 @@ export const user = sqliteTable("User", {
   createdAt: integer("createdAt", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
   emailVerified: integer("emailVerified", { mode: "boolean" })
     .notNull()
     .default(false),
@@ -30,6 +30,21 @@ export const user = sqliteTable("User", {
 });
 
 export type User = InferSelectModel<typeof user>;
+
+export const session = sqliteTable("Session", {
+  createdAt: integer("createdAt", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
+  id: text("id").primaryKey().notNull(),
+  ip: text("ip"),
+  userAgent: text("userAgent"),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
+
+export type Session = InferSelectModel<typeof session>;
 
 export const chat = sqliteTable("Chat", {
   createdAt: integer("createdAt", { mode: "timestamp" })
@@ -197,16 +212,28 @@ export type Provider = InferSelectModel<typeof provider>;
  * assistant needs to answer situational questions ("I'm renting a car").
  */
 export const benefit = sqliteTable("Benefit", {
+  activationInstructions: text("activationInstructions"),
+  activationRequired: integer("activationRequired", { mode: "boolean" })
+    .notNull()
+    .default(false),
   category: text("category").notNull(),
   details: text("details").notNull(),
   effectiveFrom: integer("effectiveFrom", { mode: "timestamp" }),
   effectiveTo: integer("effectiveTo", { mode: "timestamp" }),
+  expiresAt: integer("expiresAt", { mode: "timestamp" }),
   howToUse: text("howToUse"),
   id: text("id").primaryKey().notNull().$defaultFn(uuid),
+  keywords: text("keywords", { mode: "json" }).$type<string[]>(),
   lastVerifiedAt: integer("lastVerifiedAt", { mode: "timestamp" }),
+  monetaryValue: integer("monetaryValue"),
+  officialUrl: text("officialUrl"),
   providerId: text("providerId")
     .notNull()
     .references(() => provider.id),
+  resetFrequency: text("resetFrequency", {
+    enum: ["monthly", "quarterly", "annual", "none"],
+  }),
+  restrictions: text("restrictions"),
   sourceSnippet: text("sourceSnippet"),
   sourceType: text("sourceType", {
     enum: ["official", "guide", "licensed", "community", "seed"],
@@ -226,6 +253,9 @@ export const benefit = sqliteTable("Benefit", {
     .$defaultFn(() => []),
   title: text("title").notNull(),
   value: text("value"),
+  valuePeriod: text("valuePeriod", {
+    enum: ["monthly", "quarterly", "annual", "one_time"],
+  }),
   verifiedBy: text("verifiedBy"),
 });
 
@@ -319,3 +349,51 @@ export const benefitProposal = sqliteTable("BenefitProposal", {
 });
 
 export type BenefitProposal = InferSelectModel<typeof benefitProposal>;
+
+/**
+ * Per-user, per-period usage state for a benefit. The period is a simple
+ * identifier such as "2026-09" for monthly resets or "2026" for annual ones.
+ */
+export const userBenefitUsage = sqliteTable(
+  "UserBenefitUsage",
+  {
+    benefitId: text("benefitId")
+      .notNull()
+      .references(() => benefit.id),
+    period: text("period").notNull(),
+    savedAmount: integer("savedAmount"),
+    status: text("status", { enum: ["available", "used", "not_relevant"] })
+      .notNull()
+      .default("used"),
+    updatedAt: integer("updatedAt", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    userId: text("userId")
+      .notNull()
+      .references(() => user.id),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.benefitId, table.period] }),
+  ]
+);
+
+export type UserBenefitUsage = InferSelectModel<typeof userBenefitUsage>;
+
+/**
+ * A product the user typed in that is not in the global catalog. Clearly
+ * marked as user-created and only visible to its owner.
+ */
+export const userCustomProduct = sqliteTable("UserCustomProduct", {
+  createdAt: integer("createdAt", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  id: text("id").primaryKey().notNull().$defaultFn(uuid),
+  name: text("name").notNull(),
+  notes: text("notes"),
+  provider: text("provider"),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
+
+export type UserCustomProduct = InferSelectModel<typeof userCustomProduct>;

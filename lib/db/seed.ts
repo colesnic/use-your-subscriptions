@@ -22,6 +22,13 @@ const client = createClient({
 });
 const db = drizzle(client);
 
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 type SeedBenefit = {
   category: string;
   details: string;
@@ -4066,6 +4073,7 @@ async function seed() {
     const { benefits, ...providerValues } = seedProvider;
     const providerRow = {
       ...providerValues,
+      id: seedProvider.slug,
       lastVerifiedAt: new Date(),
       sourceType: "seed" as const,
       status: "verified" as const,
@@ -4091,6 +4099,7 @@ async function seed() {
     await db.insert(benefit).values(
       benefits.map((seedBenefit) => ({
         ...seedBenefit,
+        id: `${seedProvider.slug}-${slugify(seedBenefit.title)}`,
         lastVerifiedAt: new Date(),
         providerId: row.id,
         sourceType: "seed" as const,

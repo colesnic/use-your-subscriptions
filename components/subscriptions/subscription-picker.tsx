@@ -35,6 +35,22 @@ const categoryLabels: Record<string, string> = {
   membership: "Membership",
 };
 
+const SEARCH_ALIASES: Record<string, string[]> = {
+  aa: ["american airlines", "aadvantage"],
+  amex: ["american express"],
+  boa: ["bank of america"],
+  capone: ["capital one"],
+  tsa: ["tsa precheck"],
+};
+
+function matchesSearch(haystack: string, query: string) {
+  const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+  return tokens.every((token) => {
+    const expansions = SEARCH_ALIASES[token] ?? [token];
+    return expansions.some((expansion) => haystack.includes(expansion));
+  });
+}
+
 function formatFee(fee: number | null) {
   if (!fee) {
     return "No annual fee";
@@ -46,10 +62,12 @@ export function SubscriptionPicker({
   mode,
   onDone,
   providers,
+  showFooter = true,
 }: {
   mode: "onboarding" | "manage";
   onDone?: () => void;
   providers: PickerProvider[];
+  showFooter?: boolean;
 }) {
   const router = useRouter();
   const selectedIds = useSelectedSubscriptionIds();
@@ -68,17 +86,19 @@ export function SubscriptionPicker({
       return providers;
     }
     return providers.filter((provider) =>
-      [
-        provider.name,
-        provider.issuer,
-        provider.description,
-        provider.category,
-        SECTION_LABELS[provider.section],
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
-        .includes(term)
+      matchesSearch(
+        [
+          provider.name,
+          provider.issuer,
+          provider.description,
+          provider.category,
+          SECTION_LABELS[provider.section],
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase(),
+        term
+      )
     );
   }, [providers, query]);
 
@@ -315,20 +335,22 @@ export function SubscriptionPicker({
         </p>
       ) : null}
 
-      <div className="sticky bottom-0 -mx-1 flex items-center justify-between gap-3 border-border/60 border-t bg-background/95 px-1 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
-        <span className="text-muted-foreground text-xs">
-          {selected.size} selected · saved on this device
-        </span>
-        <div className="flex items-center gap-2">
-          <Button
-            className="touch-manipulation"
-            onClick={handleDone}
-            type="button"
-          >
-            {mode === "onboarding" ? "Continue" : "Done"}
-          </Button>
+      {showFooter ? (
+        <div className="sticky bottom-0 -mx-1 flex items-center justify-between gap-3 border-border/60 border-t bg-background/95 px-1 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
+          <span className="text-muted-foreground text-xs">
+            {selected.size} selected · saved on this device
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              className="touch-manipulation"
+              onClick={handleDone}
+              type="button"
+            >
+              {mode === "onboarding" ? "Continue" : "Done"}
+            </Button>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <Dialog onOpenChange={handleChildOpenChange} open={Boolean(childPrompt)}>
         <DialogContent className="sm:max-w-md">

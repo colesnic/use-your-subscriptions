@@ -17,7 +17,9 @@ import { type RequestHints, systemPrompt } from "@/lib/ai/prompts";
 import { getLanguageModel } from "@/lib/ai/providers";
 import { getWeather } from "@/lib/ai/tools/get-weather";
 import { searchBenefits } from "@/lib/ai/tools/search-benefits";
+import { getSessionUser } from "@/lib/auth/session";
 import { isProductionEnvironment } from "@/lib/constants";
+import { getUserProviderIds } from "@/lib/db/account";
 import { getProvidersByIds } from "@/lib/db/queries";
 import { ChatbotError } from "@/lib/errors";
 import { checkIpRateLimit } from "@/lib/ratelimit";
@@ -75,7 +77,10 @@ export async function POST(request: Request) {
     const requestHints: RequestHints = {};
 
     const modelConfig = chatModels.find((m) => m.id === chatModel);
-    const providerIds = requestBody.subscriptionIds ?? [];
+    const user = await getSessionUser();
+    const providerIds = user
+      ? await getUserProviderIds(user.id)
+      : (requestBody.subscriptionIds ?? []);
     const userProviders = await getProvidersByIds(providerIds);
     const subscriptions = userProviders.map((provider) => ({
       category: provider.category,
