@@ -30,14 +30,35 @@ function slugify(value: string) {
 }
 
 type SeedBenefit = {
+  activationInstructions?: string;
+  activationRequired?: boolean;
   category: string;
   details: string;
+  expiresAt?: Date;
   howToUse?: string;
+  monetaryValue?: number;
+  officialUrl?: string;
+  resetFrequency?:
+    | "none"
+    | "monthly"
+    | "quarterly"
+    | "semiannual"
+    | "annual"
+    | "calendar_year"
+    | "cardmember_year";
+  restrictions?: string;
   sourceUrl?: string;
   summary: string;
   tags: string[];
   title: string;
   value?: string;
+  valuePeriod?:
+    | "monthly"
+    | "quarterly"
+    | "semiannual"
+    | "annual"
+    | "per_use"
+    | "one_time";
 };
 
 type SeedProvider = {
@@ -185,6 +206,55 @@ const providers: SeedProvider[] = [
         tags: ["clear", "security", "airport", "biometric", "credit"],
         title: "CLEAR Plus credit",
         value: "Up to $199/year",
+      },
+      {
+        category: "streaming",
+        details:
+          "$20 in statement credits each month (up to $240 per year) for eligible digital entertainment subscriptions, which can include Disney+, Hulu, ESPN+, Peacock, The New York Times, Audible, and SiriusXM. Enrollment required.",
+        howToUse:
+          "Enroll the card in the digital entertainment benefit, then pay for an eligible subscription with the Platinum Card.",
+        summary:
+          "$20/month in statement credits for eligible digital entertainment subscriptions.",
+        tags: [
+          "streaming",
+          "digital entertainment",
+          "disney plus",
+          "hulu",
+          "credit",
+          "monthly",
+        ],
+        title: "Digital entertainment credit",
+        value: "$20/month",
+      },
+      {
+        category: "shopping",
+        details:
+          "Up to $50 in statement credits each half of the year (January-June and July-December) on purchases at Saks Fifth Avenue, for up to $100 per year. Enrollment required.",
+        howToUse:
+          "Enroll the card, then shop at Saks Fifth Avenue or saks.com and pay with the Platinum Card.",
+        summary:
+          "Up to $50 in statement credits semiannually at Saks Fifth Avenue.",
+        tags: ["saks", "shopping", "credit", "semiannual"],
+        title: "Saks Fifth Avenue credit",
+        value: "Up to $100/year",
+      },
+      {
+        category: "everyday",
+        details:
+          "Up to $25 in statement credits each month (up to $300 per year) toward an Equinox or Equinox+ membership. Enrollment required.",
+        summary: "Up to $25/month toward an Equinox or Equinox+ membership.",
+        tags: ["equinox", "fitness", "wellness", "credit", "monthly"],
+        title: "Equinox credit",
+        value: "Up to $300/year",
+      },
+      {
+        category: "everyday",
+        details:
+          "Up to $12.95 per month in statement credits (plus tax) to cover a monthly Walmart+ membership, up to about $155 per year. Enrollment required.",
+        summary: "Monthly statement credits covering a Walmart+ membership.",
+        tags: ["walmart", "walmart plus", "membership", "credit", "monthly"],
+        title: "Walmart+ credit",
+        value: "Up to $155/year",
       },
       {
         category: "shopping",
@@ -1182,11 +1252,25 @@ const providers: SeedProvider[] = [
       {
         category: "dining",
         details:
-          "Up to $120 in annual dining statement credits at participating partners (such as Grubhub, Cheesecake Factory, and select others) and up to $120 in Uber Cash annually ($10/month).",
-        summary: "$120 annual dining credit plus $120 annual Uber Cash.",
-        tags: ["dining credit", "uber cash", "grubhub", "credit", "dining"],
-        title: "Dining and Uber credits",
-        value: "Up to $240/year",
+          "$10 in statement credits each month (up to $120 per year) at participating dining partners such as Grubhub, Cheesecake Factory, and select others. Enrollment may be required.",
+        howToUse:
+          "Pay for an eligible order at a participating partner with the Gold Card.",
+        summary:
+          "$10/month in dining statement credits at participating partners.",
+        tags: ["dining credit", "grubhub", "credit", "dining", "monthly"],
+        title: "Dining credit",
+        value: "$10/month",
+      },
+      {
+        category: "dining",
+        details:
+          "$10 in Uber Cash each month (up to $120 per year) for rides and Uber Eats in the U.S. Add the Gold Card as a payment method in the Uber app to receive it.",
+        howToUse:
+          "Add the card as the payment method in the Uber app; the credit loads automatically each month.",
+        summary: "$10/month in Uber Cash for rides and Uber Eats.",
+        tags: ["uber", "uber eats", "rideshare", "credit", "monthly"],
+        title: "Uber Cash",
+        value: "$10/month",
       },
     ],
     category: "credit_card",
@@ -4066,6 +4150,250 @@ const relations: { child: string; note?: string; parent: string }[] = [
   },
 ];
 
+type BenefitMetadata = {
+  activationInstructions?: string;
+  activationRequired?: boolean;
+  monetaryValue?: number;
+  officialUrl?: string;
+  resetFrequency?: SeedBenefit["resetFrequency"];
+  restrictions?: string;
+  valuePeriod?: SeedBenefit["valuePeriod"];
+};
+
+const AMEX_PLATINUM =
+  "https://www.americanexpress.com/us/credit-cards/card/platinum/";
+const AMEX_GOLD =
+  "https://www.americanexpress.com/us/credit-cards/card/gold-card/";
+const AMEX_BUSINESS_PLATINUM =
+  "https://www.americanexpress.com/us/credit-cards/business/business-credit-cards/american-express-business-platinum-credit-card-amex/";
+const CHASE_SAPPHIRE_RESERVE =
+  "https://creditcards.chase.com/rewards-credit-cards/sapphire/reserve";
+const VENTURE_X = "https://www.capitalone.com/credit-cards/venture-x/";
+
+/**
+ * Structured metadata for benefits that have explicit, verifiable dollar
+ * values or practical restrictions. Keyed by the generated benefit id
+ * (`<providerSlug>-<slugified title>`). Benefits without an entry keep nulls.
+ */
+const benefitMetadata: Record<string, BenefitMetadata> = {
+  "amazon-prime-free-shipping-and-prime-video": {
+    officialUrl: "https://www.amazon.com/prime",
+  },
+  "amex-business-platinum-dell-technologies-credit": {
+    activationRequired: true,
+    monetaryValue: 20_000,
+    officialUrl: AMEX_BUSINESS_PLATINUM,
+    resetFrequency: "calendar_year",
+    restrictions:
+      "Enrollment required. Applies to U.S. purchases at Dell Technologies. Resets each calendar year.",
+    valuePeriod: "annual",
+  },
+  "amex-business-platinum-earning-rates": {
+    officialUrl: AMEX_BUSINESS_PLATINUM,
+  },
+  "amex-business-platinum-indeed-and-adobe-credits": {
+    activationRequired: true,
+    monetaryValue: 27_000,
+    officialUrl: AMEX_BUSINESS_PLATINUM,
+    resetFrequency: "calendar_year",
+    restrictions:
+      "Enrollment required. Up to $120 per year for Indeed hiring and up to $150 per year for Adobe Creative Cloud purchases. Resets each calendar year.",
+    valuePeriod: "annual",
+  },
+  "amex-gold-dining-credit": {
+    monetaryValue: 1000,
+    officialUrl: AMEX_GOLD,
+    resetFrequency: "monthly",
+    restrictions:
+      "Applies at participating partners (for example Grubhub, Cheesecake Factory, and select others). Enrollment may be required. Unused monthly credit does not roll over.",
+    valuePeriod: "monthly",
+  },
+  "amex-gold-earning-rates": {
+    officialUrl: AMEX_GOLD,
+  },
+  "amex-gold-uber-cash": {
+    monetaryValue: 1000,
+    officialUrl: AMEX_GOLD,
+    resetFrequency: "monthly",
+    restrictions:
+      "Add the Gold Card as the payment method in the Uber app. Applies to Uber rides and Uber Eats in the U.S. Unused monthly credit does not roll over.",
+    valuePeriod: "monthly",
+  },
+  "amex-platinum-airline-fee-credit": {
+    monetaryValue: 20_000,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "calendar_year",
+    restrictions:
+      "Enrollment required: select one qualifying airline. Covers incidental fees (checked bags, seat assignments, in-flight purchases), not airfare. Resets each calendar year.",
+    valuePeriod: "annual",
+  },
+  "amex-platinum-airport-lounge-access": {
+    officialUrl: AMEX_PLATINUM,
+    restrictions:
+      "Enrollment may be required for some lounge programs. Delta Sky Club access requires a same-day Delta flight.",
+  },
+  "amex-platinum-car-rental-loss-and-damage-insurance": {
+    officialUrl:
+      "https://www.americanexpress.com/en-us/benefits/insurance/car-rental-insurance/",
+  },
+  "amex-platinum-cell-phone-protection": {
+    officialUrl: AMEX_PLATINUM,
+  },
+  "amex-platinum-clear-plus-credit": {
+    monetaryValue: 19_900,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "annual",
+    restrictions:
+      "Applies to a CLEAR Plus membership charged to the card. Resets each cardmember year.",
+    valuePeriod: "annual",
+  },
+  "amex-platinum-digital-entertainment-credit": {
+    activationRequired: true,
+    monetaryValue: 2000,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "monthly",
+    restrictions:
+      "Enrollment required. Applies to eligible digital entertainment subscriptions (for example Disney+, Hulu, ESPN+, Peacock, The New York Times, Audible, SiriusXM). Unused monthly credit does not roll over.",
+    valuePeriod: "monthly",
+  },
+  "amex-platinum-earning-rates": {
+    officialUrl: AMEX_PLATINUM,
+  },
+  "amex-platinum-equinox-credit": {
+    activationRequired: true,
+    monetaryValue: 2500,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "monthly",
+    restrictions:
+      "Enrollment required. Applies to Equinox and Equinox+ memberships, up to $25 per month.",
+    valuePeriod: "monthly",
+  },
+  "amex-platinum-extended-warranty": {
+    officialUrl: AMEX_PLATINUM,
+  },
+  "amex-platinum-fine-hotels-resorts-hotel-collection-credit": {
+    monetaryValue: 20_000,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "calendar_year",
+    restrictions:
+      "Must book a prepaid stay through Amex Travel at a Fine Hotels + Resorts or The Hotel Collection property. Applies to the prepaid room rate. Resets each calendar year.",
+    valuePeriod: "annual",
+  },
+  "amex-platinum-global-entry-tsa-precheck-credit": {
+    monetaryValue: 10_000,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "none",
+    restrictions:
+      "Applies when the application fee is charged to the card, once every 4 years (Global Entry) or 4.5 years (TSA PreCheck).",
+    valuePeriod: "one_time",
+  },
+  "amex-platinum-purchase-protection": {
+    officialUrl: AMEX_PLATINUM,
+  },
+  "amex-platinum-rental-car-elite-status-hertz-avis-national": {
+    officialUrl: AMEX_PLATINUM,
+  },
+  "amex-platinum-saks-fifth-avenue-credit": {
+    activationRequired: true,
+    monetaryValue: 5000,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "semiannual",
+    restrictions:
+      "Enrollment required. Up to $50 in statement credits each half of the year (January-June and July-December) at Saks Fifth Avenue.",
+    valuePeriod: "semiannual",
+  },
+  "amex-platinum-uber-cash": {
+    monetaryValue: 1500,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "monthly",
+    restrictions:
+      "Add the Platinum Card as the payment method in the Uber app. Applies to Uber rides and Uber Eats in the U.S. Unused monthly credit does not roll over; a $35 bonus applies in December.",
+    valuePeriod: "monthly",
+  },
+  "amex-platinum-walmart-credit": {
+    activationRequired: true,
+    monetaryValue: 1295,
+    officialUrl: AMEX_PLATINUM,
+    resetFrequency: "monthly",
+    restrictions:
+      "Enrollment required. Covers a Walmart+ membership billed monthly, up to $12.95 per month plus tax.",
+    valuePeriod: "monthly",
+  },
+  "capital-one-venture-x-300-annual-travel-credit": {
+    monetaryValue: 30_000,
+    officialUrl: VENTURE_X,
+    resetFrequency: "cardmember_year",
+    restrictions:
+      "Applies to bookings made through Capital One Travel. Resets each account anniversary year.",
+    valuePeriod: "annual",
+  },
+  "capital-one-venture-x-airport-lounge-access": {
+    officialUrl: VENTURE_X,
+  },
+  "capital-one-venture-x-global-entry-tsa-precheck-credit": {
+    monetaryValue: 10_000,
+    officialUrl: VENTURE_X,
+    resetFrequency: "none",
+    restrictions:
+      "Applies when the application fee is charged to the card, once every 4 years.",
+    valuePeriod: "one_time",
+  },
+  "chase-sapphire-reserve-300-annual-travel-credit": {
+    monetaryValue: 30_000,
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+    resetFrequency: "calendar_year",
+    restrictions:
+      "Automatically applies to travel purchases (airfare, hotels, rental cars, transit) charged to the card. Resets each calendar year.",
+    valuePeriod: "annual",
+  },
+  "chase-sapphire-reserve-airport-lounge-access": {
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+  },
+  "chase-sapphire-reserve-cell-phone-protection": {
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+  },
+  "chase-sapphire-reserve-doordash-dashpass-and-credits": {
+    activationRequired: true,
+    monetaryValue: 500,
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+    resetFrequency: "monthly",
+    restrictions:
+      "Activation required for the complimentary DashPass membership. Includes up to $5 per month in DoorDash credits on eligible non-restaurant orders. Unused monthly credit does not roll over.",
+    valuePeriod: "monthly",
+  },
+  "chase-sapphire-reserve-extended-warranty": {
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+  },
+  "chase-sapphire-reserve-global-entry-tsa-precheck-credit": {
+    monetaryValue: 10_000,
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+    resetFrequency: "none",
+    restrictions:
+      "Applies when the application fee is charged to the card, once every 4 years.",
+    valuePeriod: "one_time",
+  },
+  "chase-sapphire-reserve-primary-auto-rental-collision-damage-waiver": {
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+  },
+  "chase-sapphire-reserve-purchase-protection": {
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+  },
+  "chase-sapphire-reserve-trip-protection": {
+    officialUrl: CHASE_SAPPHIRE_RESERVE,
+  },
+  "costco-executive-2-annual-reward": {
+    officialUrl: "https://www.costco.com/executive-rewards.html",
+    restrictions:
+      "Reward is based on eligible Costco and Costco.com purchases and is capped at $1,250 per year.",
+  },
+  "sams-club-plus-free-shipping-and-sams-cash": {
+    officialUrl: "https://www.samsclub.com/join",
+  },
+  "walmart-plus-free-shipping-and-delivery": {
+    officialUrl: "https://www.walmart.com/plus",
+  },
+};
+
 async function seed() {
   console.log("Seeding providers and benefits...");
 
@@ -4097,15 +4425,19 @@ async function seed() {
     await db.delete(benefit).where(eq(benefit.providerId, row.id));
 
     await db.insert(benefit).values(
-      benefits.map((seedBenefit) => ({
-        ...seedBenefit,
-        id: `${seedProvider.slug}-${slugify(seedBenefit.title)}`,
-        lastVerifiedAt: new Date(),
-        providerId: row.id,
-        sourceType: "seed" as const,
-        status: "verified" as const,
-        verifiedBy: "seed",
-      }))
+      benefits.map((seedBenefit) => {
+        const id = `${seedProvider.slug}-${slugify(seedBenefit.title)}`;
+        return {
+          ...seedBenefit,
+          ...benefitMetadata[id],
+          id,
+          lastVerifiedAt: new Date(),
+          providerId: row.id,
+          sourceType: "seed" as const,
+          status: "verified" as const,
+          verifiedBy: "seed",
+        };
+      })
     );
 
     console.log(`  ${seedProvider.name}: ${benefits.length} benefits`);

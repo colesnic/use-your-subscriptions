@@ -15,6 +15,7 @@
     "db:setup": "pnpm db:migrate && pnpm db:seed",
     "db:reset": "rm -f local.db && pnpm db:migrate && pnpm db:seed",
     "benefits:sync": "tsx lib/db/sync-benefits.ts",
+    "benefits:audit": "tsx lib/db/audit-benefits.ts",
     "db:d1:create": "wrangler d1 create chatbot-db",
     "db:d1:migrate:local": "wrangler d1 migrations apply chatbot-db --local",
     "db:d1:migrate": "wrangler d1 migrations apply chatbot-db --remote",

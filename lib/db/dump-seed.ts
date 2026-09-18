@@ -27,8 +27,15 @@ function sqlValue(value: unknown): string {
 
 const lines: string[] = [
   "-- Generated from local.db. Idempotent catalog seed for Cloudflare D1.",
-  "-- Upserts providers and benefits by stable id; leaves user data untouched.",
+  "-- Upserts providers and benefits by stable id and removes stale benefits;",
+  "-- leaves user data untouched.",
 ];
+
+const benefitRows = await client.execute("SELECT id FROM Benefit");
+const benefitIds = benefitRows.rows.map((row) => sqlValue(row.id));
+if (benefitIds.length > 0) {
+  lines.push(`DELETE FROM Benefit WHERE id NOT IN (${benefitIds.join(", ")});`);
+}
 
 for (const table of ["Provider", "Benefit"] as const) {
   const result = await client.execute(`SELECT * FROM ${table}`);

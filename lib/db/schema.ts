@@ -231,7 +231,15 @@ export const benefit = sqliteTable("Benefit", {
     .notNull()
     .references(() => provider.id),
   resetFrequency: text("resetFrequency", {
-    enum: ["monthly", "quarterly", "annual", "none"],
+    enum: [
+      "none",
+      "monthly",
+      "quarterly",
+      "semiannual",
+      "annual",
+      "calendar_year",
+      "cardmember_year",
+    ],
   }),
   restrictions: text("restrictions"),
   sourceSnippet: text("sourceSnippet"),
@@ -254,7 +262,14 @@ export const benefit = sqliteTable("Benefit", {
   title: text("title").notNull(),
   value: text("value"),
   valuePeriod: text("valuePeriod", {
-    enum: ["monthly", "quarterly", "annual", "one_time"],
+    enum: [
+      "monthly",
+      "quarterly",
+      "semiannual",
+      "annual",
+      "per_use",
+      "one_time",
+    ],
   }),
   verifiedBy: text("verifiedBy"),
 });
