@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, SearchIcon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { useSelectedSubscriptionIds } from "@/hooks/use-subscriptions";
 import {
   getSelectedSubscriptionIds,
@@ -60,10 +66,31 @@ export function SubscriptionPicker({
     children: ChildRelation[];
     selected: Set<string>;
   } | null>(null);
+  const [query, setQuery] = useState("");
+
+  const filteredProviders = useMemo(() => {
+    const term = query.trim().toLowerCase();
+    if (!term) {
+      return providers;
+    }
+    return providers.filter((provider) =>
+      [
+        provider.name,
+        provider.issuer,
+        provider.description,
+        provider.category,
+        SECTION_LABELS[provider.section],
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(term)
+    );
+  }, [providers, query]);
 
   const grouped = useMemo(() => {
     const groups = new Map<string, PickerProvider[]>();
-    for (const provider of providers) {
+    for (const provider of filteredProviders) {
       const key = provider.section || "other";
       const bucket = groups.get(key);
       if (bucket) {
@@ -75,7 +102,7 @@ export function SubscriptionPicker({
     return [...groups.entries()].sort(
       ([a], [b]) => sectionRank(a) - sectionRank(b)
     );
-  }, [providers]);
+  }, [filteredProviders]);
 
   const toggle = useCallback((id: string) => {
     const next = new Set(getSelectedSubscriptionIds());
@@ -163,8 +190,44 @@ export function SubscriptionPicker({
     router.push("/");
   }, [onDone, router]);
 
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+    },
+    []
+  );
+
+  const handleClearSearch = useCallback(() => {
+    setQuery("");
+  }, []);
+
   return (
     <div className="flex flex-col gap-8">
+      <div className="sticky top-0 z-20 -mx-1 bg-background/95 px-1 pb-1 backdrop-blur">
+        <InputGroup>
+          <InputGroupAddon>
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupInput
+            aria-label="Search subscriptions"
+            onChange={handleSearchChange}
+            placeholder="Search cards and memberships"
+            value={query}
+          />
+          {query ? (
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                aria-label="Clear search"
+                onClick={handleClearSearch}
+                size="icon-xs"
+              >
+                <XIcon />
+              </InputGroupButton>
+            </InputGroupAddon>
+          ) : null}
+        </InputGroup>
+      </div>
+
       {grouped.map(([sectionId, sectionProviders]) => (
         <section className="flex flex-col gap-3" key={sectionId}>
           <div className="flex flex-col gap-0.5">
@@ -251,6 +314,12 @@ export function SubscriptionPicker({
           </div>
         </section>
       ))}
+
+      {query.trim() && grouped.length === 0 ? (
+        <p className="text-muted-foreground text-sm">
+          No subscriptions match your search.
+        </p>
+      ) : null}
 
       <div className="sticky bottom-0 -mx-1 flex items-center justify-between gap-3 border-border/60 border-t bg-background/95 px-1 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
         <span className="text-muted-foreground text-xs">
