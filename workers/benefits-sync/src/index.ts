@@ -326,6 +326,19 @@ function timingSafeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
+async function cleanupExpired(env: Env) {
+  const now = nowSeconds();
+  await env.DB.prepare("DELETE FROM Session WHERE expiresAt < ?1")
+    .bind(now)
+    .run();
+  await env.DB.prepare("DELETE FROM VerificationToken WHERE expiresAt < ?1")
+    .bind(now)
+    .run();
+  await env.DB.prepare("DELETE FROM PasswordResetToken WHERE expiresAt < ?1")
+    .bind(now)
+    .run();
+}
+
 function authorized(request: Request, env: Env) {
   const token = env.SYNC_TOKEN;
   if (!token) {
@@ -367,6 +380,11 @@ export default {
     return new Response("not found", { status: 404 });
   },
   scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext) {
-    ctx.waitUntil(run(env));
+    ctx.waitUntil(
+      (async () => {
+        await cleanupExpired(env);
+        await run(env);
+      })()
+    );
   },
 };

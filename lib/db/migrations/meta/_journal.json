@@ -43,6 +43,13 @@
       "when": 1789745315115,
       "tag": "0005_tricky_revanche",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1789747271972,
+      "tag": "0006_outstanding_rick_jones",
+      "breakpoints": true
     }
   ]
 }

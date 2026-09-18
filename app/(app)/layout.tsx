@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { AppNav } from "@/components/app/app-nav";
+import { VerifyBanner } from "@/components/app/verify-banner";
 import {
   type ChildRelation,
   SubscriptionCatalogProvider,
@@ -46,6 +47,7 @@ export default async function AppLayout({
     >
       <div className="min-h-dvh bg-background">
         <AppNav email={user.email} />
+        {user.emailVerified ? null : <VerifyBanner />}
         <main className="mx-auto w-full max-w-5xl px-4 py-8">{children}</main>
       </div>
     </SubscriptionCatalogProvider>

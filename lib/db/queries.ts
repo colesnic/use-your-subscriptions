@@ -9,6 +9,7 @@ import {
   gt,
   gte,
   inArray,
+  isNotNull,
   lt,
   type SQL,
 } from "drizzle-orm";
@@ -558,6 +559,29 @@ export async function getAllProviders(): Promise<Provider[]> {
 }
 
 export type ProviderSummary = Provider & { benefitCount: number };
+
+export type ValuedBenefit = {
+  monetaryValue: number | null;
+  providerId: string;
+  title: string;
+  valuePeriod: string | null;
+};
+
+export async function getValuedBenefits(): Promise<ValuedBenefit[]> {
+  try {
+    return await db
+      .select({
+        monetaryValue: benefit.monetaryValue,
+        providerId: benefit.providerId,
+        title: benefit.title,
+        valuePeriod: benefit.valuePeriod,
+      })
+      .from(benefit)
+      .where(isNotNull(benefit.monetaryValue));
+  } catch (error) {
+    throw new ChatbotError("bad_request:database", { cause: error });
+  }
+}
 
 export async function getAllProvidersWithBenefitCounts(): Promise<
   ProviderSummary[]

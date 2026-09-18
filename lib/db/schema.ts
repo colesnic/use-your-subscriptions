@@ -46,6 +46,32 @@ export const session = sqliteTable("Session", {
 
 export type Session = InferSelectModel<typeof session>;
 
+export const verificationToken = sqliteTable("VerificationToken", {
+  createdAt: integer("createdAt", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
+  id: text("id").primaryKey().notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
+
+export type VerificationToken = InferSelectModel<typeof verificationToken>;
+
+export const passwordResetToken = sqliteTable("PasswordResetToken", {
+  createdAt: integer("createdAt", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
+  id: text("id").primaryKey().notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
+
+export type PasswordResetToken = InferSelectModel<typeof passwordResetToken>;
+
 export const chat = sqliteTable("Chat", {
   createdAt: integer("createdAt", { mode: "timestamp" })
     .notNull()

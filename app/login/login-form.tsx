@@ -110,18 +110,28 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <button
-        className="text-muted-foreground text-xs underline"
-        onClick={() => {
-          setError(null);
-          setMode((current) => (current === "signin" ? "signup" : "signin"));
-        }}
-        type="button"
-      >
-        {mode === "signin"
-          ? "Need an account? Sign up"
-          : "Already have an account? Sign in"}
-      </button>
+      <div className="flex items-center justify-between gap-2">
+        <button
+          className="text-muted-foreground text-xs underline"
+          onClick={() => {
+            setError(null);
+            setMode((current) => (current === "signin" ? "signup" : "signin"));
+          }}
+          type="button"
+        >
+          {mode === "signin"
+            ? "Need an account? Sign up"
+            : "Already have an account? Sign in"}
+        </button>
+        {mode === "signin" ? (
+          <Link
+            className="text-muted-foreground text-xs underline"
+            href="/forgot-password"
+          >
+            Forgot password?
+          </Link>
+        ) : null}
+      </div>
     </div>
   );
 }

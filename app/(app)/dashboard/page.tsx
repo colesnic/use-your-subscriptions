@@ -243,6 +243,12 @@ export default async function DashboardPage() {
           </Link>
           <Link
             className="rounded-lg border border-border/60 px-3 py-1.5"
+            href="/share"
+          >
+            Share your savings
+          </Link>
+          <Link
+            className="rounded-lg border border-border/60 px-3 py-1.5"
             href="/chat"
           >
             Ask a question

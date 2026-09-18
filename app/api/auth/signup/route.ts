@@ -4,8 +4,10 @@ import { isSameOrigin } from "@/lib/auth/origin";
 import { hashPassword } from "@/lib/auth/password";
 import { isAuthRateLimited } from "@/lib/auth/rate-limit";
 import { createSession, setSessionCookie } from "@/lib/auth/session";
+import { createVerificationToken } from "@/lib/auth/verification";
 import { db } from "@/lib/db/client";
 import { user } from "@/lib/db/schema";
+import { appBaseUrl, sendEmail } from "@/lib/email";
 
 const bodySchema = z.object({
   email: z.email().max(200),
@@ -68,6 +70,14 @@ export async function POST(request: Request) {
     userAgent: request.headers.get("user-agent"),
   });
   await setSessionCookie(token, expiresAt);
+
+  const verifyToken = await createVerificationToken(created.id);
+  const verifyUrl = `${appBaseUrl(new URL(request.url).origin)}/verify-email?token=${verifyToken}`;
+  await sendEmail({
+    subject: "Verify your MembershipMaxxing email",
+    text: `Confirm your email to finish setting up your account:\n\n${verifyUrl}\n\nIf you did not create an account, you can ignore this email.`,
+    to: email,
+  });
 
   return Response.json(
     { user: { email: created.email, id: created.id, name: created.name } },
