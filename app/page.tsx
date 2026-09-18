@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CardSwipe } from "@/components/marketing/card-swipe";
 
 const EXAMPLES = [
   {
@@ -64,7 +65,8 @@ export default function LandingPage() {
       </header>
 
       <main className="mx-auto flex max-w-5xl flex-col gap-16 px-4 pb-24">
-        <section className="flex flex-col items-center gap-6 pt-16 text-center">
+        <section className="flex flex-col items-center gap-6 pt-6 text-center">
+          <CardSwipe />
           <h1 className="max-w-3xl font-serif text-4xl font-medium leading-tight sm:text-6xl">
             You&apos;re already paying for it.
             <br />
